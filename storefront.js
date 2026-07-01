@@ -1,82 +1,86 @@
-// Storefront View Controller for HandMade Crochet
+// Storefront Controller for HandMade Crochet - Bilingual & Multi-Currency
 import { store } from './store.js';
 import { CouponEngine } from './coupons.js';
 
-// Bilingual Dictionary for EN / AR translations
+// Comprehensive translation dictionary for public facing elements
 const DICTIONARY = {
-  store_name: { en: "HandMade Crochet", ar: "كروشيه يدوي" },
+  store_name: { en: "HandMade Crochet", ar: "كروشيه يدوّي" },
   home: { en: "Home", ar: "الرئيسية" },
   shop: { en: "Shop Collection", ar: "المتجر" },
   about: { en: "Our Story", ar: "قصتنا" },
   custom: { en: "Custom Orders", ar: "طلبات خاصة" },
-  gallery: { en: "Gallery", ar: "المعرض" },
-  blog: { en: "Artisan Blog", ar: "المدونة" },
+  gallery: { en: "Artisan Gallery", ar: "معرض الحِرف" },
+  blog: { en: "Blog & Care Tips", ar: "المدونة والنصائح" },
   contact: { en: "Contact Us", ar: "اتصل بنا" },
-  cart: { en: "Cart", ar: "السلة" },
-  search_placeholder: { en: "Search cozy crochet...", ar: "ابحث عن كروشيه دافئ..." },
+  cart: { en: "Shopping Cart", ar: "سلة المشتريات" },
+  search_placeholder: { en: "Search cozy designs...", ar: "ابحث عن تصاميم كروشيه دافئة..." },
   add_to_cart: { en: "Add to Cart", ar: "أضف إلى السلة" },
-  buy_now: { en: "Buy Now", ar: "اشترِ الآن" },
+  buy_now: { en: "Buy Now", ar: "شراء الآن" },
   best_sellers: { en: "Best Sellers", ar: "الأكثر مبيعاً" },
   new_collection: { en: "New Collection", ar: "المجموعة الجديدة" },
-  reviews: { en: "What Our Customers Say", ar: "آراء عملائنا" },
-  about_brand: { en: "About the Brand", ar: "عن العلامة التجارية" },
+  reviews: { en: "Reviews", ar: "آراء عملائنا" },
   newsletter_title: { en: "Join the Cozy Circle", ar: "انضم إلى مجتمعنا الدافئ" },
-  newsletter_desc: { en: "Subscribe to receive custom collection releases and care tips.", ar: "اشترك لتصلك إصدارات المجموعات الجديدة ونصائح العناية." },
-  subscribe: { en: "Subscribe", ar: "اشترك" },
+  newsletter_desc: { en: "Subscribe for new crochet collection drops and organic care tips.", ar: "اشترك لتصلك إصدارات المجموعات الجديدة ونصائح العناية بالصوف الطبيعي." },
+  subscribe: { en: "Subscribe", ar: "اشتراك" },
   categories: { en: "Categories", ar: "الفئات" },
   sort_by: { en: "Sort By", ar: "ترتيب حسب" },
   price_filter: { en: "Price Range", ar: "نطاق السعر" },
   wishlist: { en: "Wishlist", ar: "قائمة الأمنيات" },
   quick_view: { en: "Quick View", ar: "معاينة سريعة" },
   materials: { en: "Materials Used", ar: "المواد المستخدمة" },
-  knit_process: { en: "Artisan Stitching Process", ar: "خطوات العمل اليدوي" },
+  knit_process: { en: "Handcraft Stitching Process", ar: "خطوات الحياكة اليدوية" },
   colors: { en: "Available Colors", ar: "الألوان المتاحة" },
   sizes: { en: "Sizes", ar: "المقاسات" },
   qty: { en: "Quantity", ar: "الكمية" },
   related_products: { en: "You May Also Love", ar: "قد يعجبك أيضاً" },
-  custom_title: { en: "Request a Custom Piece", ar: "طلب قطعة مصممة خصيصاً لك" },
-  custom_desc: { en: "Describe your dream crochet item. Our local artisans will knit it to your exact specifications.", ar: "صف قطعة الكروشيه التي تحلم بها. وسيقوم الحرفيون لدينا بحياكتها بمقاساتك وألوانك المفضلة." },
-  name: { en: "Your Name", ar: "الاسم" },
+  custom_title: { en: "Request a Custom Crochet Piece", ar: "طلب قطعة كروشيه مصممة خصيصاً لك" },
+  custom_desc: { en: "Describe your dream crochet item. Our master artisans will knit it step-by-step to your exact specifications.", ar: "صف قطعة الكروشيه التي تحلم بها. وسيقوم الحرفيون لدينا بحياكتها غرزة بغرزة بمقاساتك وألوانك المفضلة." },
+  name: { en: "Your Name", ar: "الاسم الكريم" },
   email: { en: "Email Address", ar: "البريد الإلكتروني" },
-  description: { en: "Details / Specifications", ar: "التفاصيل / المواصفات" },
-  upload_image: { en: "Upload Reference Image", ar: "رفع صورة توضيحية" },
-  budget: { en: "Target Budget ($)", ar: "الميزانية المقترحة ($)" },
+  description: { en: "Details / Specifications", ar: "التفاصيل / المواصفات المطلوبة" },
+  upload_image: { en: "Upload Reference Image", ar: "رفع صورة توضيحية للموديل" },
+  budget: { en: "Target Budget", ar: "الميزانية المقترحة" },
   date: { en: "Target Delivery Date", ar: "تاريخ التسليم المقترح" },
-  submit_request: { en: "Submit Custom Request", ar: "إرسال الطلب الخاص" },
-  gift_wrap: { en: "Gift Wrapping (+ $5.00)", ar: "تغليف كهدية (+ $5.00)" },
+  submit_request: { en: "Submit Custom Request", ar: "إرسال طلب الحياكة الخاصة" },
+  gift_wrap: { en: "Luxury Gift Wrapping", ar: "تغليف هدايا فاخر" },
   authenticity: { en: "Handmade Authenticity Certificate (Free)", ar: "شهادة أصالة الصناعة اليدوية (مجاناً)" },
-  loyalty_points: { en: "Earn Loyalty Reward Points", ar: "كسب نقاط المكافأة والولاء" }
+  loyalty_points: { en: "Earn Loyalty Reward Points", ar: "كسب نقاط مكافأة الولاء" },
+  empty_cart: { en: "Your cart is empty.", ar: "سلة المشتريات فارغة حالياً." },
+  subtotal: { en: "Subtotal", ar: "المجموع الفرعي" },
+  shipping: { en: "Shipping Fee", ar: "رسوم الشحن" },
+  total: { en: "Total Amount", ar: "المبلغ الإجمالي" },
+  checkout: { en: "Place Order (Checkout)", ar: "إتمام الطلب والدفع" },
+  all_products: { en: "All Products", ar: "جميع المنتجات" }
 };
 
 export class Storefront {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
+    
+    // Core states
     this.cart = JSON.parse(localStorage.getItem('cart') || '[]');
     this.wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     this.activeCategory = 'All';
     this.searchQuery = '';
     this.priceLimit = 300;
-    this.sortOrder = 'default'; // default, low-high, high-low
+    this.sortOrder = 'default';
     this.appliedCouponCode = localStorage.getItem('applied_coupon') || '';
-    
-    // Auth and Session mock
-    this.customerEmail = localStorage.getItem('customer_email') || '';
-    this.customerName = localStorage.getItem('customer_name') || '';
+
+    // Gift and cert details
     this.giftWrappingActive = JSON.parse(localStorage.getItem('gift_wrapping') || 'false');
     this.includeCertificate = JSON.parse(localStorage.getItem('include_cert') || 'true');
     this.userLoggedIn = localStorage.getItem('user_session_email') !== null;
     this.userEmail = localStorage.getItem('user_session_email') || '';
 
-    // Hero dots
     this.currentSlideIndex = 0;
     this.sliderInterval = null;
     this.toastContainer = null;
-    
-    // Subscribe to store updates
+
+    // Subscribe to state updates
     this.unsubscribe = store.subscribe((key, val) => {
       if (key === 'active_language' || key === 'active_currency' || key === 'products' || key === 'siteSettings' || key === 'banners') {
-        this.render();
         this.updateTheme();
+        this.render();
       }
     });
 
@@ -94,17 +98,28 @@ export class Storefront {
     if (this.sliderInterval) clearInterval(this.sliderInterval);
   }
 
-  // Get active language / currency
-  lang() {
-    return localStorage.getItem('active_language') || 'en';
-  }
-
-  currency() {
-    return localStorage.getItem('active_currency') || 'USD';
-  }
+  lang() { return localStorage.getItem('active_language') || 'en'; }
+  currency() { return localStorage.getItem('active_currency') || 'USD'; }
+  isRtl() { return this.lang() === 'ar'; }
 
   t(key) {
     return DICTIONARY[key] ? (DICTIONARY[key][this.lang()] || key) : key;
+  }
+
+  // Calculate Exchange Rate Conversion
+  formatPrice(usdAmount) {
+    const settings = store.getSettings();
+    const curr = this.currency();
+    const rate = settings.exchangeRates[curr] || 1.0;
+    const converted = usdAmount * rate;
+
+    const symbols = {
+      USD: `$${converted.toFixed(2)}`,
+      EGP: `${converted.toFixed(0)} ج.م`,
+      SAR: `${converted.toFixed(2)} ر.س`
+    };
+
+    return symbols[curr] || `$${usdAmount.toFixed(2)}`;
   }
 
   updateTheme() {
@@ -112,33 +127,29 @@ export class Storefront {
     if (!settings || !settings.theme) return;
     const theme = settings.theme;
     const root = document.documentElement;
-    
+
     root.style.setProperty('--primary-color', theme.primaryColor);
     root.style.setProperty('--accent-color', theme.accentColor);
     root.style.setProperty('--bg-color', theme.bgColor);
     root.style.setProperty('--text-color', theme.textColor);
     root.style.setProperty('--card-bg-color', theme.cardBgColor);
-    
-    // Set RTL attribute on body dynamically
-    if (this.lang() === 'ar') {
+
+    if (this.isRtl()) {
       document.body.setAttribute('dir', 'rtl');
     } else {
       document.body.removeAttribute('dir');
     }
   }
 
-  // State synchronization methods
   saveCart() {
     localStorage.setItem('cart', JSON.stringify(this.cart));
     localStorage.setItem('gift_wrapping', JSON.stringify(this.giftWrappingActive));
     localStorage.setItem('include_cert', JSON.stringify(this.includeCertificate));
-    
     if (this.appliedCouponCode) {
       localStorage.setItem('applied_coupon', this.appliedCouponCode);
     } else {
       localStorage.removeItem('applied_coupon');
     }
-    
     this.renderCartItems();
     this.renderCartSummary();
     this.updateCartBadge();
@@ -146,20 +157,19 @@ export class Storefront {
 
   saveWishlist() {
     localStorage.setItem('wishlist', JSON.stringify(this.wishlist));
-    this.updateWishlistCount();
   }
 
   toggleWishlist(productId) {
     const idx = this.wishlist.indexOf(productId);
     if (idx !== -1) {
       this.wishlist.splice(idx, 1);
-      this.showToast(this.lang() === 'ar' ? 'تمت إزالة القطعة من قائمة الأمنيات' : 'Removed from wishlist.', 'info');
+      this.showToast(this.isRtl() ? 'تمت إزالة القطعة من قائمة الأمنيات' : 'Removed from wishlist.', 'info');
     } else {
       this.wishlist.push(productId);
-      this.showToast(this.lang() === 'ar' ? 'تمت إضافة القطعة لقائمة الأمنيات' : 'Added to wishlist!', 'success');
+      this.showToast(this.isRtl() ? 'تمت إضافة القطعة إلى قائمة الأمنيات!' : 'Added to wishlist!', 'success');
     }
     this.saveWishlist();
-    this.render(); // Redraw grid icons
+    this.render();
   }
 
   addToCart(productId, quantity = 1, selectedSize = "M", selectedColor = "Original") {
@@ -168,33 +178,35 @@ export class Storefront {
     if (!product) return;
 
     if (product.inventory <= 0) {
-      this.showToast(this.lang() === 'ar' ? 'عذراً، نفذت كمية هذا المنتج' : 'This product is out of stock.', 'error');
+      this.showToast(this.isRtl() ? 'عذراً، نفذت كمية هذا المنتج من المخزن.' : 'Product is out of stock.', 'error');
       return;
     }
 
     const cartKey = `${productId}-${selectedSize}-${selectedColor}`;
     const existingIndex = this.cart.findIndex(item => `${item.productId}-${item.size}-${item.color}` === cartKey);
-    
+
     if (existingIndex !== -1) {
       const newQty = this.cart[existingIndex].quantity + quantity;
       if (newQty > product.inventory) {
         this.cart[existingIndex].quantity = product.inventory;
-        this.showToast(this.lang() === 'ar' ? 'تم الوصول للحد الأقصى للمخزون المتوفر' : 'Limited to available stock.', 'warning');
+        this.showToast(this.isRtl() ? 'تم الوصول للحد الأقصى للمخزون المتوفر' : 'Limited to available stock.', 'warning');
       } else {
         this.cart[existingIndex].quantity = newQty;
-        this.showToast(this.lang() === 'ar' ? 'تمت إضافة الكمية للسلة' : 'Cart quantity updated.', 'success');
+        this.showToast(this.isRtl() ? 'تم تحديث الكمية داخل السلة' : 'Cart quantity updated.', 'success');
       }
     } else {
       this.cart.push({
         productId,
-        name: product.name,
+        nameEn: product.nameEn,
+        nameAr: product.nameAr,
         price: product.price,
         category: product.category,
+        categoryAr: product.categoryAr,
         quantity: Math.min(quantity, product.inventory),
         size: selectedSize,
         color: selectedColor
       });
-      this.showToast(this.lang() === 'ar' ? 'تمت إضافة القطعة إلى السلة' : 'Added to cart!', 'success');
+      this.showToast(this.isRtl() ? 'تمت إضافة القطعة إلى سلة المشتريات!' : 'Added to cart!', 'success');
     }
     this.saveCart();
   }
@@ -207,7 +219,7 @@ export class Storefront {
     }
     const toast = document.createElement('div');
     toast.className = `toast glass-panel ${type}`;
-    toast.innerHTML = `<span>🔔</span> <span>${message}</span>`;
+    toast.innerHTML = `<span>🧶</span> <span>${message}</span>`;
     this.toastContainer.appendChild(toast);
 
     setTimeout(() => toast.classList.add('show'), 10);
@@ -217,7 +229,6 @@ export class Storefront {
     }, 2800);
   }
 
-  // Hero carousel
   startSlider() {
     if (this.sliderInterval) clearInterval(this.sliderInterval);
     const banners = store.getBanners();
@@ -242,23 +253,22 @@ export class Storefront {
     });
   }
 
-  // Renders the SPA skeleton
   render() {
     if (!this.container) return;
     const settings = store.getSettings();
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
 
     this.container.innerHTML = `
-      <!-- Top Promotion countdown clock -->
+      <!-- Top Promo countdown banner -->
       ${this.renderSaleCountdown(settings.saleBanner)}
 
-      <!-- Artisan Header Navbar -->
+      <!-- Sticky Header -->
       <nav class="sticky-navbar glass-panel">
         <div class="logo-artisan" id="logo-home-btn" style="cursor:pointer;">
-          <span style="color:var(--primary-color);">🧶</span> ${isAr ? 'كروشيه يدوي' : 'HandMade'}
+          <span style="color:var(--primary-color);">🧶</span> ${isAr ? settings.logo.split(' ').slice(1).join(' ') || 'كروشيه يدوي' : 'HandMade'}
         </div>
 
-        <div class="nav-links" id="desktop-menu-links">
+        <div class="nav-links">
           <a href="#home" class="nav-item ${this.getRoute() === 'home' ? 'active' : ''}">${this.t('home')}</a>
           <a href="#shop" class="nav-item ${this.getRoute() === 'shop' ? 'active' : ''}">${this.t('shop')}</a>
           <a href="#custom" class="nav-item ${this.getRoute() === 'custom' ? 'active' : ''}">${this.t('custom')}</a>
@@ -269,27 +279,30 @@ export class Storefront {
         </div>
 
         <div class="nav-controls">
-          <!-- Bilingual Switch -->
+          <!-- Currency switcher -->
+          <select id="currency-switch-select" style="background:none; border:none; color:var(--text-color); font-weight:700; font-family:inherit; cursor:pointer;">
+            <option value="USD" ${this.currency() === 'USD' ? 'selected' : ''}>USD ($)</option>
+            <option value="EGP" ${this.currency() === 'EGP' ? 'selected' : ''}>EGP (ج.م)</option>
+            <option value="SAR" ${this.currency() === 'SAR' ? 'selected' : ''}>SAR (ر.س)</option>
+          </select>
+
+          <!-- Language switch -->
           <button class="control-btn" id="lang-switch-btn" title="Toggle Language">
             🌐 <span class="lang-badge">${isAr ? 'EN' : 'عربي'}</span>
           </button>
-          
-          <!-- User Profile Icon / Dashboard -->
+
+          <!-- User Dashboard portal -->
           <button class="control-btn" id="user-portal-btn" title="User Dashboard">
             👤
           </button>
 
-          <!-- Cart button with badge -->
+          <!-- Cart with badge -->
           <button class="control-btn" id="open-cart-btn" style="position:relative;">
             🛒 <span class="cart-badge" id="cart-badge-val" style="position:absolute; top:-5px; right:-5px; background:var(--primary-color); color:#fff; font-size:0.7rem; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; display:none;">0</span>
           </button>
-          
-          <!-- Admin Dashboard Switch -->
-          ${store.isAdminLoggedIn() ? `
-            <a href="#admin" class="btn-luxury" style="padding:0.4rem 1rem; font-size:0.8rem; border-radius:10px;">${isAr ? 'لوحة المسؤول' : 'Admin Panel'}</a>
-          ` : `
-            <a href="#admin" style="font-size:0.8rem; opacity:0.5; margin-left:0.5rem;">Admin</a>
-          `}
+
+          <!-- Admin dashboard entry -->
+          <a href="#admin" class="btn-luxury" style="padding:0.4rem 1rem; font-size:0.8rem; border-radius:10px;">${isAr ? 'لوحة التحكم' : 'Console'}</a>
         </div>
       </nav>
 
@@ -298,12 +311,14 @@ export class Storefront {
         ${this.renderViewContent()}
       </div>
 
-      <!-- Cozy Footer -->
-      <footer style="background:#1c1917; color:#f5efe6; padding:4rem 4%; border-top:1px solid var(--border-color); font-size:0.9rem;">
-        <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:3rem;">
+      <!-- Footer -->
+      <footer style="background:#1c1917; color:#f5efe6; padding:4rem 6%; border-top:1px solid var(--border-color); font-size:0.9rem;">
+        <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:3rem; text-align:start;">
           <div>
-            <h3 style="font-family:var(--font-heading); font-size:1.8rem; color:#fff; margin-bottom:1rem;">🧶 ${settings.name}</h3>
-            <p style="opacity:0.8; line-height:1.8;">${isAr ? 'قطع كروشيه وحرف يدوية فاخرة تُحاك يدوياً بحب وعناية فائقة، باستخدام أجود أنواع خيوط القطن والصوف العضوي المستدام.' : 'Premium luxury handmade crochet designs stitched stitch-by-stitch with sustainable materials.'}</p>
+            <h3 style="font-family:var(--font-heading); font-size:1.8rem; color:#fff; margin-bottom:1rem;">🧶 ${isAr ? 'كروشيه يدوّي' : settings.name}</h3>
+            <p style="opacity:0.8; line-height:1.8;">
+              ${isAr ? 'تصاميم كروشيه وحرف يدوية فاخرة تُحاك يدوياً غرزة بغرزة بحب وعناية فائقة، باستخدام أجود أنواع خيوط القطن والصوف العضوي المستدام.' : 'Premium luxury handmade crochet designs stitched stitch-by-stitch with sustainable materials.'}
+            </p>
           </div>
           <div>
             <h3 style="font-family:var(--font-heading); font-size:1.3rem; color:#fff; margin-bottom:1.25rem;">${this.t('contact')}</h3>
@@ -312,9 +327,9 @@ export class Storefront {
             <p style="opacity:0.8;">✉️ ${settings.contactEmail}</p>
           </div>
           <div>
-            <h3 style="font-family:var(--font-heading); font-size:1.3rem; color:#fff; margin-bottom:1.25rem;">Follow Artisan</h3>
+            <h3 style="font-family:var(--font-heading); font-size:1.3rem; color:#fff; margin-bottom:1.25rem;">${isAr ? 'تابعنا على منصات التواصل' : 'Follow Artisan'}</h3>
             <div style="display:flex; gap:1.25rem; font-size:1.3rem;">
-              <a href="${settings.socialLinks.instagram}" target="_blank">📷</a>
+              <a href="${settings.socialLinks.instagram}" target="_blank">📸</a>
               <a href="${settings.socialLinks.facebook}" target="_blank">📘</a>
               <a href="${settings.socialLinks.twitter}" target="_blank">🐦</a>
             </div>
@@ -330,17 +345,18 @@ export class Storefront {
       <div class="cart-slider-panel glass-panel" id="cart-drawer">
         <div class="cart-header" style="padding:1.5rem; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
           <h2>${this.t('cart')}</h2>
-          <button id="close-cart-btn" style="font-size:1.5rem;">✕</button>
-        </div>
-        <div class="cart-items-list" id="cart-items-list-container" style="flex:1; overflow-y:auto; padding:1.5rem; display:flex; flex-direction:column; gap:1.25rem;">
-          <!-- Inject items -->
+          <button id="close-cart-btn" style="font-size:1.5rem; background:none; border:none; cursor:pointer;">✕</button>
         </div>
         
-        <!-- Gift wrapping & certificates -->
-        <div style="padding:1rem 1.5rem; border-top:1px solid var(--border-color); background:rgba(120,53,15,0.02); font-size:0.85rem; display:flex; flex-direction:column; gap:0.6rem;">
+        <div class="cart-items-list" id="cart-items-list-container" style="flex:1; overflow-y:auto; padding:1.5rem; display:flex; flex-direction:column; gap:1.25rem; text-align:start;">
+          <!-- Items inject -->
+        </div>
+        
+        <!-- Options -->
+        <div style="padding:1rem 1.5rem; border-top:1px solid var(--border-color); background:rgba(120,53,15,0.02); font-size:0.85rem; display:flex; flex-direction:column; gap:0.6rem; text-align:start;">
           <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
             <input type="checkbox" id="cart-gift-wrap-check" ${this.giftWrappingActive ? 'checked' : ''}>
-            <span>🎁 ${this.t('gift_wrap')}</span>
+            <span>🎁 ${this.t('gift_wrap')} (+ ${this.formatPrice(5.00)})</span>
           </label>
           <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
             <input type="checkbox" id="cart-certificate-check" ${this.includeCertificate ? 'checked' : ''}>
@@ -348,15 +364,17 @@ export class Storefront {
           </label>
         </div>
 
-        <div class="cart-coupon-section" style="padding:1rem 1.5rem; border-top:1px solid var(--border-color);">
+        <!-- Coupon validation -->
+        <div class="cart-coupon-section" style="padding:1rem 1.5rem; border-top:1px solid var(--border-color); text-align:start;">
           <div class="coupon-input-group">
-            <input type="text" id="coupon-code-input" placeholder="Coupon Code" value="${this.appliedCouponCode}">
+            <input type="text" id="coupon-code-input" placeholder="${isAr ? 'كود الخصم' : 'Coupon Code'}" value="${this.appliedCouponCode}">
             <button class="coupon-apply-btn" id="coupon-apply-btn">${isAr ? 'تطبيق' : 'Apply'}</button>
           </div>
           <div id="coupon-status-box"></div>
         </div>
-        <div class="cart-summary" id="cart-summary-container" style="padding:1.5rem; border-top:1px solid var(--border-color); background:rgba(0,0,0,0.02);">
-          <!-- Summary breakdown -->
+
+        <div class="cart-summary" id="cart-summary-container" style="padding:1.5rem; border-top:1px solid var(--border-color); background:rgba(0,0,0,0.02); text-align:start;">
+          <!-- Totals -->
         </div>
       </div>
 
@@ -375,7 +393,7 @@ export class Storefront {
         <div class="modal-container glass-panel" id="checkout-container" style="max-width:600px; width:100%; padding:2.5rem;"></div>
       </div>
 
-      <!-- Floating Widgets -->
+      <!-- Widgets -->
       <div class="floating-widget-box ${isAr ? 'right' : 'left'}">
         <a href="https://wa.me/${settings.whatsappNumber.replace(/[^0-9]/g, '')}?text=Hello!%20I'm%20interested%20in%20your%20crochet%20handicrafts." target="_blank" class="float-btn whatsapp" title="Chat on WhatsApp">💬</a>
       </div>
@@ -396,38 +414,27 @@ export class Storefront {
     return hash.split('-')[0].replace('#', '');
   }
 
-  // Views Router
   renderViewContent() {
     const route = this.getRoute();
-    
     switch (route) {
-      case 'home':
-        return this.renderHomeView();
-      case 'shop':
-        return this.renderShopView();
-      case 'details':
-        return this.renderDetailsView();
-      case 'custom':
-        return this.renderCustomOrdersView();
-      case 'gallery':
-        return this.renderGalleryView();
-      case 'blog':
-        return this.renderBlogView();
-      case 'about':
-        return this.renderAboutView();
-      case 'contact':
-        return this.renderContactView();
-      default:
-        return this.renderHomeView();
+      case 'home': return this.renderHomeView();
+      case 'shop': return this.renderShopView();
+      case 'details': return this.renderDetailsView();
+      case 'custom': return this.renderCustomOrdersView();
+      case 'gallery': return this.renderGalleryView();
+      case 'blog': return this.renderBlogView();
+      case 'about': return this.renderAboutView();
+      case 'contact': return this.renderContactView();
+      default: return this.renderHomeView();
     }
   }
 
-  // Countdown timer banner
   renderSaleCountdown(banner) {
     if (!banner || !banner.enabled) return '';
+    const text = this.isRtl() ? (banner.textAr || banner.text) : banner.text;
     return `
       <div class="flash-sale-banner" id="flash-sale-container" style="padding:0.4rem 2rem; font-size:0.85rem; font-weight:500;">
-        <span>⚡ ${banner.text}</span>
+        <span>⚡ ${text}</span>
         <div class="flash-timer" style="margin-inline-start: 1rem;">
           <span id="countdown-timer-value">00d : 00h : 00m : 00s</span>
         </div>
@@ -447,7 +454,7 @@ export class Storefront {
       const distance = expiry - now;
 
       if (distance < 0) {
-        timerSpan.innerText = "Sale ended!";
+        timerSpan.innerText = this.isRtl() ? "انتهى الخصم!" : "Sale ended!";
         const banner = document.getElementById('flash-sale-container');
         if (banner) banner.style.display = 'none';
         return;
@@ -468,105 +475,119 @@ export class Storefront {
 
   // Home Page View
   renderHomeView() {
+    const settings = store.getSettings();
     const banners = store.getBanners();
     const products = store.getProducts();
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
+
+    // Render enabled sections based on settings layout ordering
+    const sectionsHtml = settings.sectionsOrder.map(sec => {
+      if (sec === 'hero') {
+        return `
+          <!-- Hero Section -->
+          <section class="cozy-hero">
+            ${banners.map((b, index) => `
+              <div class="hero-slide ${index === this.currentSlideIndex ? 'active' : ''}" style="background-image: url('${b.image}');">
+                <div class="hero-content">
+                  <h1>${isAr ? b.titleAr : b.title}</h1>
+                  <p>${isAr ? b.subtitleAr : b.subtitle}</p>
+                  <a href="${b.linkTarget || '#shop'}" class="btn-luxury" style="width:fit-content;">${isAr ? b.linkTextAr : b.linkText} →</a>
+                </div>
+              </div>
+            `).join('')}
+            <div class="slider-dots" style="position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; gap:0.75rem; z-index:5;">
+              ${banners.map((_, index) => `
+                <div class="dot ${index === this.currentSlideIndex ? 'active' : ''}" data-index="${index}" style="width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.4); cursor:pointer;"></div>
+              `).join('')}
+            </div>
+          </section>
+        `;
+      }
+      if (sec === 'about') {
+        return `
+          <!-- About brand statement -->
+          <section style="padding:6rem 8%; text-align:center; max-width:900px; margin:0 auto;">
+            <span style="font-size:0.8rem; text-transform:uppercase; color:var(--primary-color); font-weight:700; letter-spacing:0.1em; display:block; margin-bottom:1rem;">${isAr ? 'الإرث والتميّز الحرفي' : 'Artisanal Heritage'}</span>
+            <h2 style="font-size:2.8rem; margin-bottom:1.5rem;">${isAr ? 'حياكة يدوية تروي دفء الحكاية والأناقة' : 'Stitched with Warmth, Designed for Luxury'}</h2>
+            <p style="font-size:1.1rem; opacity:0.85; line-height:1.8; margin-bottom:2rem;">
+              ${isAr ? 'نؤمن في كروشيه يدوي بأن كل غرزة تمثل وقتاً وصبراً وشغفاً. تُحاك كل قطعة ببطء وتفانٍ باستخدام صوف ميرينو الفاخر وخيوط القطن العضوية الصديقة للبيئة لنوفر لك إرثاً أصيلاً يعيش طويلاً.' : 'At HandMade Crochet, we believe in slow fashion. Every cardigan and accessory is knitted stitch-by-stitch by local women artisans, blending traditional techniques with modern aesthetic comfort.'}
+            </p>
+            <a href="#about" class="btn-luxury-outline">${this.t('about')}</a>
+          </section>
+        `;
+      }
+      if (sec === 'products') {
+        return `
+          <!-- Best Sellers -->
+          <section style="padding:4rem 6%; border-top:1px solid var(--border-color); background:rgba(120,53,15,0.015);">
+            <h2 style="text-align:center; font-size:2.2rem; margin-bottom:0.5rem;">${this.t('best_sellers')}</h2>
+            <p style="text-align:center; opacity:0.7; margin-bottom:2.5rem;">${isAr ? 'القطع الأكثر طلباً وحياكة لهذا الموسم' : 'Our most wanted hand-stitched pieces this season.'}</p>
+            <div class="crochet-grid">
+              ${products.slice(0, 3).map(p => this.renderProductCard(p)).join('')}
+            </div>
+          </section>
+        `;
+      }
+      if (sec === 'custom') {
+        return `
+          <!-- AI Recommendations section / Call to Custom -->
+          <section style="padding:5rem 6%; border-top:1px solid var(--border-color); text-align:center;">
+            <div class="glass-panel" style="padding:3.5rem; border-radius:var(--border-radius-lg); max-width:800px; margin:0 auto; display:flex; flex-direction:column; align-items:center;">
+              <span style="font-size:0.8rem; text-transform:uppercase; color:var(--primary-color); font-weight:700;">✨ ${isAr ? 'طلب تفصيل خاص' : 'Artisan Customizer'}</span>
+              <h2 style="margin-bottom:1rem; margin-top:0.5rem;">${isAr ? 'هل تحلم بتصميم كروشيه مخصص؟' : 'Looking for a custom size or style?'}</h2>
+              <p style="opacity:0.8; margin-bottom:2rem; max-width:600px;">
+                ${isAr ? 'يمكننا حياكة سترتك المفضلة بأبعادك الدقيقة وتنسيقات الألوان التي تختارها بنفسك. تواصل مع حياكاتنا المحترفات الآن.' : 'We can craft our cardigans to your custom sizing and color preferences with our local knitters.'}
+              </p>
+              <a href="#custom" class="btn-luxury">${isAr ? 'ابدأ طلبك الخاص الآن' : 'Request Custom Order'}</a>
+            </div>
+          </section>
+        `;
+      }
+      if (sec === 'reviews') {
+        return `
+          <!-- Testimonials -->
+          <section style="padding:5rem 6%; text-align:center; border-top:1px solid var(--border-color); background:var(--card-bg-color);">
+            <h2 style="font-size:2rem; margin-bottom:0.5rem;">${this.t('reviews')}</h2>
+            <p style="opacity:0.7; margin-bottom:2.5rem;">${isAr ? 'ماذا يقول عشاق الكروشيه عن جودة حياكتنا الفاخرة' : 'What yarn-lovers say about our heirloom quality.'}</p>
+            <div style="max-width:600px; margin:0 auto; padding:2.5rem; background:var(--bg-color); border-radius:var(--border-radius-md); border:1px solid var(--border-color); display:flex; flex-direction:column; align-items:center; gap:1rem;">
+              <div style="color:gold; font-size:1.3rem;">★★★★★</div>
+              <p style="font-style:italic; font-size:1.1rem; opacity:0.95;">
+                "${isAr ? 'السترة صوفية مذهلة وناعمة للغاية! التفاصيل اليدوية وغرز الألوان دافئة بشكل رائع، وتغليف الهدية مميز جداً. سأطلب قطعة أخرى بالتأكيد!' : 'The cardigan is absolutely gorgeous! Thick, warm, and fits like a dream. You can tell it was knitted with extreme precision.'}"
+              </p>
+              <strong>- ${isAr ? 'تالا ك.، جبيل' : 'Tala K., Byblos'}</strong>
+            </div>
+          </section>
+        `;
+      }
+      if (sec === 'instagram') {
+        return `
+          <!-- Instagram gallery showcase -->
+          <section style="padding:5rem 6%; border-top:1px solid var(--border-color); text-align:center;">
+            <h2 style="font-size:2rem; margin-bottom:0.5rem;">#HandMadeCrochet</h2>
+            <p style="opacity:0.7; margin-bottom:2.5rem;">${isAr ? 'لقطات وتنسيقات كروشيه ملهمة من مجتمعنا الدافئ' : 'Artisanal styling moments from our warm community.'}</p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:1.25rem;">
+              ${[1,2,3,4,5,6].map(i => `
+                <div class="glass-panel" style="padding-top:100%; border-radius:12px; position:relative; overflow:hidden;">
+                  <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(120,53,15,0.02); font-size:1.5rem; font-weight:700; color:var(--primary-color);">
+                    📷 <span style="font-size:0.75rem; opacity:0.5; margin-top:0.25rem;">@handstitched</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </section>
+        `;
+      }
+      return '';
+    }).join('');
 
     return `
-      <!-- Hero Slider Section -->
-      <section class="cozy-hero">
-        ${banners.map((b, index) => `
-          <div class="hero-slide ${index === this.currentSlideIndex ? 'active' : ''}" style="background-image: url('${b.image}');">
-            <div class="hero-content">
-              <h1>${b.title}</h1>
-              <p>${b.subtitle}</p>
-              <a href="${b.linkTarget || '#shop'}" class="btn-luxury">${b.linkText || 'Discover Now'} →</a>
-            </div>
-          </div>
-        `).join('')}
-        
-        <div class="slider-dots" style="position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; gap:0.75rem; z-index:5;">
-          ${banners.map((_, index) => `
-            <div class="dot ${index === this.currentSlideIndex ? 'active' : ''}" data-index="${index}" style="width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.4); cursor:pointer;"></div>
-          `).join('')}
-        </div>
-      </section>
-
-      <!-- Brand Story Section -->
-      <section style="padding:5rem 8%; text-align:center; max-width:900px; margin:0 auto;">
-        <span style="font-size:0.8rem; text-transform:uppercase; color:var(--primary-color); font-weight:700; letter-spacing:0.1em; display:block; margin-bottom:1rem;">Artisanal Heritage</span>
-        <h2 style="font-size:2.8rem; font-family:var(--font-heading); margin-bottom:1.5rem;">${isAr ? 'حياكة يدوية تحكي الدفء والأناقة' : 'Stitched with Warmth, Designed for Luxury'}</h2>
-        <p style="font-size:1.1rem; opacity:0.8; line-height:1.8; margin-bottom:2rem;">
-          ${isAr ? 'نؤمن في كروشيه يدوي بأن كل غرزة تمثل شغفاً ووقتاً. تُحاك كل قطعة ببطء وصبر باستخدام صوف ميرينو وخيوط قطنية عضوية صديقة للبيئة لنوفر لك إرثاً أصيلاً يعيش طويلاً.' : 'At HandMade Crochet, we believe in slow fashion. Every cardigan and accessory is knitted stitch-by-stitch by local women artisans, blending traditional techniques with modern aesthetic comfort.'}
-        </p>
-        <a href="#about" class="btn-luxury-outline">${this.t('about')}</a>
-      </section>
-
-      <!-- Best Sellers -->
-      <section style="padding:4rem 6%; border-top:1px solid var(--border-color); background:rgba(120,53,15,0.02);">
-        <h2 class="shop-section-title">${this.t('best_sellers')}</h2>
-        <p class="shop-section-subtitle">${isAr ? 'القطع اليدوية الأكثر طلباً لهذا الموسم' : 'Our most wanted hand-stitched pieces this season.'}</p>
-        
-        <div class="crochet-grid">
-          ${products.slice(0, 3).map(p => this.renderProductCard(p)).join('')}
-        </div>
-      </section>
-
-      <!-- AI Recommended Section (Simulated) -->
-      <section style="padding:5rem 6%; border-top:1px solid var(--border-color); text-align:center;">
-        <div class="glass-panel" style="padding:3rem; border-radius:var(--border-radius-lg); max-width:800px; margin:0 auto;">
-          <span style="font-size:0.8rem; text-transform:uppercase; color:var(--primary-color); font-weight:700;">✨ AI Style Matcher</span>
-          <h2 style="margin-bottom:1rem; margin-top:0.5rem;">${isAr ? 'اقتراح ذكي مخصص لك' : 'AI-Powered Recommendations'}</h2>
-          <p style="opacity:0.8; margin-bottom:2rem;">${isAr ? 'بناءً على ذوقك الراقي ومشترياتك السابقة، نقترح لك إضافة قطعة الخريف المميزة' : 'Based on the earthy terracotta tone of cardigans, we recommend matching them with:'}</p>
-          <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap;">
-            <div style="background:var(--card-bg-color); padding:1rem; border-radius:12px; display:flex; align-items:center; gap:1rem; text-align:left;">
-              <span style="font-size:2rem;">👜</span>
-              <div>
-                <strong>Cream Shell Stitch Tote</strong><br>
-                <span style="font-size:0.8rem; color:var(--primary-color); font-weight:700;">Artisan Choice</span>
-              </div>
-            </div>
-            <div style="background:var(--card-bg-color); padding:1rem; border-radius:12px; display:flex; align-items:center; gap:1rem; text-align:left;">
-              <span style="font-size:2rem;">🌿</span>
-              <div>
-                <strong>Sage Leaf Headband</strong><br>
-                <span style="font-size:0.8rem; color:var(--primary-color); font-weight:700;">Boho Match</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Instagram Grid -->
-      <section style="padding:4rem 6%; border-top:1px solid var(--border-color); background:var(--card-bg-color);">
-        <h2 class="shop-section-title">#HandMadeCrochet</h2>
-        <p class="shop-section-subtitle">${isAr ? 'شاركونا لحظاتكم الدافئة على إنستغرام' : 'Artisanal styling moments from our warm community.'}</p>
-        
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:1rem;">
-          ${[1,2,3,4,5,6].map(i => `
-            <div class="glass-panel" style="padding-top:100%; border-radius:12px; position:relative; overflow:hidden;">
-              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); font-size:1.5rem; font-weight:700; color:var(--primary-color);">📸</div>
-            </div>
-          `).join('')}
-        </div>
-      </section>
-
-      <!-- Customer Reviews -->
-      <section style="padding:5rem 6%; text-align:center; border-top:1px solid var(--border-color);">
-        <h2 class="shop-section-title">${this.t('reviews')}</h2>
-        <p class="shop-section-subtitle">${isAr ? 'ماذا يقول عشاق الكروشيه عن جودة منتجاتنا' : 'What yarn-lovers say about our stitched heirloom quality.'}</p>
-        <div style="max-width:600px; margin:0 auto; padding:2rem; background:var(--card-bg-color); border-radius:var(--border-radius-md); border:1px solid var(--border-color);">
-          <div style="color:gold; font-size:1.3rem; margin-bottom:1rem;">★★★★★</div>
-          <p style="font-style:italic; font-size:1.1rem; opacity:0.9; margin-bottom:1.5rem;">"${isAr ? 'السترة صوفية ناعمة للغاية ودافئة بشكل لا يصدق! التفاصيل اليدوية والزخارف المنسوجة تمنحني إحساساً بالفخامة والتميز. سأطلب بالتأكيد قطعة أخرى.' : 'The terracotta cardigan is absolutely stunning! Soft, heavy, and fits like a dream. You can feel the hours of hand-stitching in every row.'}"</p>
-          <strong>- Tala K., Byblos</strong>
-        </div>
-      </section>
-
-      <!-- Newsletter -->
+      ${sectionsHtml}
+      
+      <!-- Newsletter Signup -->
       <section style="padding:6rem 6%; border-top:1px solid var(--border-color); background:linear-gradient(135deg, var(--card-bg-color) 0%, var(--bg-color) 100%); text-align:center;">
         <h2 style="font-size:2.5rem; margin-bottom:1rem;">${this.t('newsletter_title')}</h2>
         <p style="opacity:0.8; max-width:600px; margin:0 auto 2.5rem;">${this.t('newsletter_desc')}</p>
-        <form style="display:flex; justify-content:center; gap:0.5rem; max-width:500px; margin:0 auto; flex-wrap:wrap;">
+        <form style="display:flex; justify-content:center; gap:0.5rem; max-width:500px; margin:0 auto; flex-wrap:wrap;" id="home-newsletter-form">
           <input type="email" placeholder="${this.t('email')}" required style="flex:1; padding:0.8rem 1.5rem; border-radius:30px; border:1px solid var(--border-color); background:rgba(255,255,255,0.7); min-width:250px;">
           <button type="submit" class="btn-luxury">${this.t('subscribe')}</button>
         </form>
@@ -574,22 +595,25 @@ export class Storefront {
     `;
   }
 
-  // Shop Catalog View
+  // Shop View
   renderShopView() {
     const products = store.getProducts();
     const categories = store.getCategories();
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
 
-    // Filters logic
     let filtered = products;
 
     if (this.activeCategory !== 'All') {
       filtered = filtered.filter(p => p.category === this.activeCategory);
     }
-    
     if (this.searchQuery.trim()) {
       const q = this.searchQuery.toLowerCase();
-      filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+      filtered = filtered.filter(p => 
+        p.nameEn.toLowerCase().includes(q) || 
+        p.nameAr.includes(q) ||
+        p.descriptionEn.toLowerCase().includes(q) ||
+        p.descriptionAr.includes(q)
+      );
     }
 
     filtered = filtered.filter(p => p.price <= this.priceLimit);
@@ -602,60 +626,67 @@ export class Storefront {
 
     return `
       <div class="shop-catalog-layout">
-        <!-- Sidebar Filters -->
+        <!-- Filter sidebar -->
         <aside class="shop-sidebar">
-          
-          <!-- Search -->
+          <!-- Search Widget -->
           <div class="sidebar-widget glass-panel">
-            <h3 class="widget-title">${isAr ? 'بحث' : 'Search'}</h3>
+            <h3 class="widget-title">${isAr ? 'البحث في المعرض' : 'Search Store'}</h3>
             <input type="text" id="shop-search-field" placeholder="${this.t('search_placeholder')}" value="${this.searchQuery}" style="width:100%; padding:0.6rem 1rem; border-radius:8px; border:1px solid var(--border-color); background:rgba(255,255,255,0.5);">
           </div>
 
-          <!-- Categories -->
+          <!-- Category widget -->
           <div class="sidebar-widget glass-panel">
             <h3 class="widget-title">${this.t('categories')}</h3>
-            <div style="display:flex; flex-direction:column; gap:0.5rem;">
-              <button class="shop-cat-filter-btn ${this.activeCategory === 'All' ? 'active' : ''}" data-cat="All" style="text-align:start; padding:0.3rem 0.5rem; font-weight:${this.activeCategory === 'All' ? '700' : 'normal'}; color:${this.activeCategory === 'All' ? 'var(--primary-color)' : 'inherit'};">${isAr ? 'جميع المعروضات' : 'All Collection'}</button>
-              ${categories.map(cat => `
-                <button class="shop-cat-filter-btn ${this.activeCategory === cat ? 'active' : ''}" data-cat="${cat}" style="text-align:start; padding:0.3rem 0.5rem; font-weight:${this.activeCategory === cat ? '700' : 'normal'}; color:${this.activeCategory === cat ? 'var(--primary-color)' : 'inherit'};">${cat}</button>
-              `).join('')}
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <button class="shop-cat-filter-btn ${this.activeCategory === 'All' ? 'active' : ''}" data-cat="All" style="text-align:start; background:none; border:none; cursor:pointer; font-weight:${this.activeCategory === 'All' ? '700' : 'normal'}; color:${this.activeCategory === 'All' ? 'var(--primary-color)' : 'inherit'}; font-size:0.95rem;">
+                👉 ${this.t('all_products')}
+              </button>
+              ${categories.map(cat => {
+                // Find category translation name
+                const prodWithCat = products.find(pr => pr.category === cat);
+                const nameShow = (isAr && prodWithCat) ? prodWithCat.categoryAr : cat;
+                return `
+                  <button class="shop-cat-filter-btn ${this.activeCategory === cat ? 'active' : ''}" data-cat="${cat}" style="text-align:start; background:none; border:none; cursor:pointer; font-weight:${this.activeCategory === cat ? '700' : 'normal'}; color:${this.activeCategory === cat ? 'var(--primary-color)' : 'inherit'}; font-size:0.95rem;">
+                    👉 ${nameShow}
+                  </button>
+                `;
+              }).join('')}
             </div>
           </div>
 
           <!-- Price filter -->
           <div class="sidebar-widget glass-panel">
             <h3 class="widget-title">${this.t('price_filter')}</h3>
-            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:0.5rem;">
-              <span>$0</span>
-              <span style="font-weight:700; color:var(--primary-color);">$${this.priceLimit}</span>
+            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:0.5rem; font-weight:700;">
+              <span>$10</span>
+              <span style="color:var(--primary-color); font-size:1rem;">$${this.priceLimit}</span>
             </div>
-            <input type="range" id="shop-price-slider" min="10" max="300" step="5" value="${this.priceLimit}" style="width:100%; accent-color:var(--primary-color);">
+            <input type="range" id="shop-price-slider" min="10" max="300" step="5" value="${this.priceLimit}" style="width:100%; accent-color:var(--primary-color); cursor:pointer;">
           </div>
 
-          <!-- Sort -->
+          <!-- Price sorting widget -->
           <div class="sidebar-widget glass-panel">
             <h3 class="widget-title">${this.t('sort_by')}</h3>
-            <select id="shop-sort-select" style="width:100%; padding:0.6rem; border-radius:8px; border:1px solid var(--border-color); background:rgba(255,255,255,0.5);">
+            <select id="shop-sort-select" style="width:100%; padding:0.6rem; border-radius:8px; border:1px solid var(--border-color); background:rgba(255,255,255,0.5); font-family:inherit;">
               <option value="default" ${this.sortOrder === 'default' ? 'selected' : ''}>Default</option>
               <option value="low-high" ${this.sortOrder === 'low-high' ? 'selected' : ''}>Price: Low to High</option>
               <option value="high-low" ${this.sortOrder === 'high-low' ? 'selected' : ''}>Price: High to Low</option>
             </select>
           </div>
-
         </aside>
 
-        <!-- Product Grid view -->
+        <!-- Product grid content -->
         <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; font-size:0.9rem;">
-            <span>${filtered.length} ${isAr ? 'منتج متوفر' : 'items found'}</span>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; font-size:0.95rem; font-weight:600;">
+            <span>${filtered.length} ${isAr ? 'منتجات عُثر عليها' : 'crochet items found'}</span>
           </div>
 
-          <div class="crochet-grid">
+          <div class="crochet-grid" id="shop-products-grid">
             ${filtered.map(p => this.renderProductCard(p)).join('')}
             ${filtered.length === 0 ? `
-              <div style="grid-column: 1 / -1; padding: 5rem; text-align:center; color:var(--neutral-gray);">
-                <span style="font-size:3rem;">🧶</span>
-                <p style="margin-top:1rem;">No items match the chosen filters.</p>
+              <div style="grid-column: 1 / -1; padding: 6rem; text-align:center; color:var(--text-color); opacity:0.6;">
+                <span style="font-size:3.5rem; display:block;">🧶</span>
+                <p style="margin-top:1.5rem; font-size:1.1rem; font-weight:700;">${isAr ? 'عذراً، لم يعثر على أي منتجات مطابقة للبحث' : 'No items match your selected filters.'}</p>
               </div>
             ` : ''}
           </div>
@@ -667,24 +698,29 @@ export class Storefront {
   renderProductCard(p) {
     const isWished = this.wishlist.includes(p.id);
     const isOutOfStock = p.inventory <= 0;
+    const isAr = this.isRtl();
+    const name = isAr ? p.nameAr : p.nameEn;
+    const cat = isAr ? p.categoryAr : p.category;
 
     return `
       <div class="crochet-card" data-product-id="${p.id}">
         <div class="card-image-panel">
-          <img class="card-image open-details-trigger" src="${p.image}" alt="${p.name}">
-          <div class="card-badge" style="display:${isOutOfStock ? 'block' : 'none'}; background:red;">Out of Stock</div>
+          <img class="card-image open-details-trigger" src="${p.image}" alt="${name}" style="cursor:pointer;">
+          ${isOutOfStock ? `<div class="card-badge" style="background:#ef4444;">${isAr ? 'نفذت الكمية' : 'Out of Stock'}</div>` : ''}
           <div class="card-action-overlay">
             <button class="overlay-action-btn wish-toggle-btn" data-product-id="${p.id}" title="Wishlist">${isWished ? '❤️' : '🤍'}</button>
             <button class="overlay-action-btn quick-view-btn" data-product-id="${p.id}" title="Quick View">👁️</button>
           </div>
         </div>
+        
         <div class="card-info">
-          <span class="card-category">${p.category}</span>
-          <h3 class="card-title open-details-trigger" style="cursor:pointer;">${p.name}</h3>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
-            <span class="card-price">$${p.price.toFixed(2)}</span>
-            <button class="btn-luxury quick-buy-btn" data-product-id="${p.id}" ${isOutOfStock ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="padding:0.5rem 1rem; font-size:0.8rem;">
-              ＋ ${this.t('add_to_cart')}
+          <span class="card-category">${cat}</span>
+          <h3 class="card-title open-details-trigger" style="cursor:pointer; font-size:1rem; line-height:1.4;">${name}</h3>
+          
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:0.75rem; border-top:1px solid rgba(120,53,15,0.05);">
+            <span class="card-price" style="font-size:1.1rem; font-weight:800;">${this.formatPrice(p.price)}</span>
+            <button class="btn-luxury quick-buy-btn" data-product-id="${p.id}" ${isOutOfStock ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} style="padding:0.4rem 0.8rem; font-size:0.75rem; border-radius:15px;">
+              ＋ ${isAr ? 'أضف' : 'Add'}
             </button>
           </div>
         </div>
@@ -692,80 +728,95 @@ export class Storefront {
     `;
   }
 
-  // Detailed Product View
+  // Product Details page zoom view
   renderDetailsView() {
     const hash = window.location.hash || '#details-1';
     const prodId = hash.split('-')[1] || '1';
     const products = store.getProducts();
     const p = products.find(prod => prod.id === prodId);
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
 
     if (!p) {
-      return `<div style="padding:5rem; text-align:center;">Product not found.</div>`;
+      return `<div style="padding:5rem; text-align:center; font-weight:700;">Product not found.</div>`;
     }
+
+    const name = isAr ? p.nameAr : p.nameEn;
+    const cat = isAr ? p.categoryAr : p.category;
+    const desc = isAr ? p.descriptionAr : p.descriptionEn;
+    const materials = isAr ? p.materialsAr : p.materialsEn;
+    const process = isAr ? p.processAr : p.processEn;
 
     return `
       <div class="details-page-layout">
-        <!-- Image Gallery with Simulated Zoom -->
+        <!-- Zoom Image Container -->
         <div class="zoom-image-container" id="zoom-container">
-          <img id="details-zoom-img" src="${p.image}" alt="${p.name}">
+          <img id="details-zoom-img" src="${p.image}" alt="${name}">
         </div>
 
-        <!-- Specifications Panel -->
-        <div style="display:flex; flex-direction:column; gap:1.5rem;">
-          <span style="font-size:0.85rem; text-transform:uppercase; color:var(--primary-color); font-weight:700;">${p.category}</span>
-          <h1 style="font-size:2.8rem; font-family:var(--font-heading); line-height:1.2;">${p.name}</h1>
-          <div style="font-size:1.8rem; font-weight:800; color:var(--primary-color);">$${p.price.toFixed(2)}</div>
-          
-          <p style="opacity:0.8; line-height:1.7;">${p.description}</p>
+        <!-- Description panel -->
+        <div style="display:flex; flex-direction:column; gap:1.5rem; text-align:start;">
+          <span style="font-size:0.85rem; text-transform:uppercase; color:var(--primary-color); font-weight:700;">${cat}</span>
+          <h1 style="font-size:2.8rem; font-family:var(--font-heading); line-height:1.2; font-weight:700; color:var(--text-color);">${name}</h1>
+          <div style="font-size:2rem; font-weight:900; color:var(--primary-color);">${this.formatPrice(p.price)}</div>
 
-          <div style="border-top:1px solid var(--border-color); padding-top:1.5rem;">
-            <strong>📋 ${this.t('materials')}</strong>
-            <p style="opacity:0.8; font-size:0.9rem; margin-top:0.3rem;">${p.materials || '100% Organic Eco-Cotton Yarn'}</p>
+          <p style="opacity:0.85; line-height:1.7; font-size:1rem;">${desc}</p>
+
+          <div style="border-top:1px solid var(--border-color); padding-top:1.25rem;">
+            <strong>🧶 ${this.t('materials')}</strong>
+            <p style="opacity:0.8; font-size:0.9rem; margin-top:0.25rem;">${materials}</p>
           </div>
 
           <div>
             <strong>⏳ ${this.t('knit_process')}</strong>
-            <p style="opacity:0.8; font-size:0.9rem; margin-top:0.3rem;">${p.process || 'Hand-knitted with love over 10-15 hours of delicate stitching.'}</p>
+            <p style="opacity:0.8; font-size:0.9rem; margin-top:0.25rem;">${process}</p>
           </div>
 
-          <!-- Color Options -->
+          <!-- Color option circles -->
           <div>
             <strong>🎨 ${this.t('colors')}</strong>
-            <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-              ${(p.colors || ["Cream", "Terracotta"]).map((col, idx) => `
-                <div class="color-dot-selector ${idx === 0 ? 'selected' : ''}" data-color="${col}" title="${col}" style="background-color: ${col === 'Terracotta' ? '#c2410c' : (col === 'Cream' ? '#f5efe6' : (col === 'Mustard' ? '#d97706' : '#64748b'))};"></div>
-              `).join('')}
+            <div style="display:flex; gap:0.6rem; margin-top:0.5rem;">
+              ${(p.colors || ["Cream", "Terracotta"]).map((col, idx) => {
+                const colorCode = col === 'Terracotta' ? '#c2410c' : (col === 'Cream' ? '#f5efe6' : (col === 'Mustard' ? '#d97706' : (col === 'Emerald' ? '#047857' : '#64748b')));
+                return `
+                  <div class="color-dot-selector ${idx === 0 ? 'selected' : ''}" data-color="${col}" title="${col}" style="background-color: ${colorCode}; border:1px solid rgba(0,0,0,0.15);"></div>
+                `;
+              }).join('')}
             </div>
           </div>
 
-          <!-- Sizes Options -->
+          <!-- Size buttons selector -->
           <div>
             <strong>📏 ${this.t('sizes')}</strong>
-            <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+            <div style="display:flex; gap:0.6rem; margin-top:0.5rem;">
               ${(p.sizes || ["S", "M", "L"]).map((sz, idx) => `
-                <button class="btn-luxury-outline size-select-btn ${idx === 0 ? 'active' : ''}" data-size="${sz}" style="padding:0.4rem 1rem; font-size:0.85rem; min-width:40px;">${sz}</button>
+                <button class="btn-luxury-outline size-select-btn ${idx === 0 ? 'active' : ''}" data-size="${sz}" style="padding:0.4rem 1.2rem; font-size:0.85rem; border-radius:15px; min-width:48px;">
+                  ${sz}
+                </button>
               `).join('')}
             </div>
           </div>
 
-          <!-- Action buttons -->
-          <div style="display:flex; gap:1rem; align-items:center; margin-top:1rem; flex-wrap:wrap;">
+          <!-- Cart integrations -->
+          <div style="display:flex; gap:1.25rem; align-items:center; margin-top:1.5rem; flex-wrap:wrap;">
             <div class="quantity-selector">
               <button class="qty-btn" id="details-dec-qty">-</button>
               <span class="qty-val" id="details-qty-val">1</span>
               <button class="qty-btn" id="details-inc-qty">+</button>
             </div>
 
-            <button class="btn-luxury" id="details-add-to-cart-btn" style="flex:1;">🛍️ ${this.t('add_to_cart')}</button>
-            <button class="btn-luxury-outline" id="details-buy-now-btn" style="flex:1;">⚡ ${this.t('buy_now')}</button>
+            <button class="btn-luxury" id="details-add-to-cart-btn" style="flex:1; justify-content:center; font-weight:700; padding:0.9rem;">
+              🛒 ${this.t('add_to_cart')}
+            </button>
+            <button class="btn-luxury-outline" id="details-buy-now-btn" style="flex:1; justify-content:center; font-weight:700; padding:0.9rem;">
+              ⚡ ${this.t('buy_now')}
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- Related Products -->
-      <section style="padding:4rem 4%; border-top:1px solid var(--border-color); background:rgba(120,53,15,0.01);">
-        <h2 style="font-size:2rem; font-family:var(--font-heading); margin-bottom:2rem; text-align:center;">${this.t('related_products')}</h2>
+      <!-- Related designs carousel -->
+      <section style="padding:4rem 6%; border-top:1px solid var(--border-color); background:rgba(120,53,15,0.015);">
+        <h2 style="font-size:2rem; font-family:var(--font-heading); margin-bottom:2.5rem; text-align:center;">${this.t('related_products')}</h2>
         <div class="crochet-grid">
           ${products.filter(prod => prod.id !== p.id).slice(0, 3).map(prod => this.renderProductCard(prod)).join('')}
         </div>
@@ -773,16 +824,16 @@ export class Storefront {
     `;
   }
 
-  // Custom Orders Form View
+  // Custom Orders View
   renderCustomOrdersView() {
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
     return `
       <div class="custom-order-layout">
-        <!-- Form Panel -->
-        <div class="glass-panel" style="padding:2.5rem; border-radius:var(--border-radius-lg);">
-          <span style="font-size:0.8rem; text-transform:uppercase; color:var(--primary-color); font-weight:700;">Artisan Customizer</span>
-          <h1 style="font-size:2.5rem; font-family:var(--font-heading); margin-bottom:1rem; margin-top:0.5rem;">${this.t('custom_title')}</h1>
-          <p style="opacity:0.8; margin-bottom:2rem;">${this.t('custom_desc')}</p>
+        <!-- Order customizer panel -->
+        <div class="glass-panel" style="padding:3rem; border-radius:var(--border-radius-lg); text-align:start;">
+          <span style="font-size:0.8rem; text-transform:uppercase; color:var(--primary-color); font-weight:700; display:block; margin-bottom:0.5rem;">Artisan customizer</span>
+          <h1 style="font-size:2.6rem; margin-bottom:1rem; font-weight:700; line-height:1.2;">${this.t('custom_title')}</h1>
+          <p style="opacity:0.85; margin-bottom:2rem; font-size:1rem; line-height:1.7;">${this.t('custom_desc')}</p>
 
           <form id="custom-knit-request-form" style="display:flex; flex-direction:column; gap:1.25rem;">
             <div class="checkout-form-grid">
@@ -797,14 +848,14 @@ export class Storefront {
             </div>
 
             <div class="form-group">
-              <label>${this.t('description')} (Stitch type, cardigan length, details)</label>
-              <textarea id="cust-spec" rows="4" placeholder="${isAr ? 'مثال: سترة بأكمام منفوخة وزخارف زهور برية صفراء، مقاس متوسط...' : 'e.g. A chunky cropped knit cardigan with sunflower grid squares on the sleeves...'}" required></textarea>
+              <label>${this.t('description')}</label>
+              <textarea id="cust-spec" rows="4" placeholder="${isAr ? 'مثال: سترة كروب بأكمام واسعة وزخارف وردة دوار الشمس، مقاس متوسط...' : 'e.g. A cropped thick knit cardigan with bell sleeves and sunflower squares...'}" required></textarea>
             </div>
 
             <div class="checkout-form-grid">
               <div class="form-group">
                 <label>${this.t('sizes')}</label>
-                <select id="cust-size" style="background:var(--card-bg-color); border:1px solid var(--border-color); padding:0.6rem; border-radius:8px; color:var(--text-color);">
+                <select id="cust-size" style="background:#fff; border:1px solid var(--border-color); padding:0.6rem; border-radius:8px;">
                   <option value="S">Small (S)</option>
                   <option value="M" selected>Medium (M)</option>
                   <option value="L">Large (L)</option>
@@ -812,7 +863,7 @@ export class Storefront {
                 </select>
               </div>
               <div class="form-group">
-                <label>${this.t('budget')}</label>
+                <label>${this.t('budget')} ($)</label>
                 <input type="number" id="cust-budget" placeholder="e.g. 150" required>
               </div>
             </div>
@@ -824,52 +875,53 @@ export class Storefront {
               </div>
               <div class="form-group">
                 <label>${this.t('upload_image')}</label>
-                <input type="file" id="cust-file" accept="image/*" style="background:rgba(0,0,0,0.02); padding:0.4rem; border-radius:8px;">
+                <input type="file" id="cust-file" accept="image/*" style="background:rgba(0,0,0,0.02); padding:0.45rem; border-radius:8px; border:1px dashed var(--border-color);">
               </div>
             </div>
 
-            <button type="submit" class="btn-luxury mt-4">${this.t('submit_request')}</button>
+            <button type="submit" class="btn-luxury mt-4" style="justify-content:center; padding:1rem; font-weight:700;">
+              🚀 ${this.t('submit_request')}
+            </button>
           </form>
         </div>
 
-        <!-- Info Showcase Sidebar -->
-        <div style="display:flex; flex-direction:column; gap:2rem;">
+        <!-- Sidebar notes -->
+        <div style="display:flex; flex-direction:column; gap:2rem; text-align:start;">
           <div class="glass-panel" style="padding:2rem; border-radius:var(--border-radius-md);">
-            <h3>🧶 Handcrafted Process</h3>
-            <ul style="margin-top:1rem; display:flex; flex-direction:column; gap:0.8rem; padding-inline-start:1.2rem; opacity:0.8;">
-              <li>Review: Our head artisan reviews color combinations and yarn compatibility.</li>
-              <li>Sourcing: We source local, plant-dyed organic yarns.</li>
-              <li>Stitching: The piece is hand-stitched over 10-25 dedicated hours.</li>
-              <li>Delivery: Shipped worldwide with a signed certificate of handcraft authenticity.</li>
+            <h3 style="font-size:1.15rem; margin-bottom:1rem;">🧶 ${isAr ? 'مراحل العمل والإنتاج اليدوي' : 'Handcrafted Production'}</h3>
+            <ul style="display:flex; flex-direction:column; gap:1rem; padding-inline-start:1.25rem; font-size:0.9rem; opacity:0.85;">
+              <li>${isAr ? 'مراجعة الموديل وتأكيد الأبعاد من قبل كبير الحياكات.' : 'Our head artisan reviews design patterns and details.'}</li>
+              <li>${isAr ? 'صبغ خيوط الصوف والقطن الطبيعي بالألوان والدرجات المطلوبة.' : 'Sourcing organic, non-toxic plant dyed cotton yarns.'}</li>
+              <li>${isAr ? 'الحياكة اليدوية الدقيقة التي قد تستغرق من 10 إلى 25 ساعة.' : 'Precision hand-stitching over 10-25 hours.'}</li>
+              <li>${isAr ? 'تغليف القطعة الفاخر وإرفاق شهادة الأصالة الموقعة.' : 'Luxury wrapping with signed certificate of authenticity.'}</li>
             </ul>
           </div>
-          
+
           <div class="glass-panel" style="padding:2rem; border-radius:var(--border-radius-md); text-align:center;">
-            <span style="font-size:3rem;">🎨</span>
-            <h4 style="margin-top:0.5rem; margin-bottom:0.5rem;">Need Color Advice?</h4>
-            <p style="opacity:0.8; font-size:0.9rem; margin-bottom:1.5rem;">Chat directly with our head knitter on WhatsApp for suggestions.</p>
-            <a href="https://wa.me/${store.getSettings().whatsappNumber.replace(/[^0-9]/g, '')}?text=Hi,%20I'm%20planning%20a%20custom%20crochet%20order%20and%20need%20color%20suggestions." target="_blank" class="btn-luxury-outline">WhatsApp Consultation</a>
+            <span style="font-size:3rem; display:block; margin-bottom:0.5rem;">🎨</span>
+            <h4 style="margin-bottom:0.5rem;">${isAr ? 'استشارة تنسيق الألوان' : 'Need Color Advice?'}</h4>
+            <p style="opacity:0.8; font-size:0.85rem; margin-bottom:1.5rem;">${isAr ? 'تحدث مباشرة مع خبيرة الحياكة للحصول على ترشيحات الألوان المتاحة.' : 'Chat directly with our head knitter on WhatsApp for styling suggestions.'}</p>
+            <a href="https://wa.me/${store.getSettings().whatsappNumber.replace(/[^0-9]/g, '')}?text=Hi,%20I'm%20planning%20a%20custom%20order%20and%20need%20color%20suggestions." target="_blank" class="btn-luxury-outline" style="width:100%; justify-content:center;">WhatsApp Chat</a>
           </div>
         </div>
       </div>
     `;
   }
 
-  // Gallery view
   renderGalleryView() {
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
     return `
       <div style="padding:4rem 6%;">
-        <h1 class="shop-section-title">${this.t('gallery')}</h1>
-        <p class="shop-section-subtitle">${isAr ? 'ألبوم صور من ورش العمل وقطع الكروشيه المكتملة' : 'A visual look inside our warm workshops and completed pieces.'}</p>
-        
+        <h1 style="font-size:2.8rem; margin-bottom:0.5rem; text-align:center;">${this.t('gallery')}</h1>
+        <p style="text-align:center; opacity:0.7; margin-bottom:3rem;">${isAr ? 'ألبوم صور من ورش العمل وقطع الكروشيه الفاخرة' : 'A visual look inside our warm workshops and completed designs.'}</p>
+
         <div class="masonry-grid">
           ${[1,2,3,4,5,6,7,8].map(i => `
-            <div class="masonry-item glass-panel">
-              <div style="padding-top:${i % 2 === 0 ? '120%' : '80%'}; position:relative; background:rgba(0,0,0,0.02);">
+            <div class="masonry-item glass-panel" style="position:relative;">
+              <div style="padding-top:${i % 2 === 0 ? '120%' : '85%'}; background:rgba(0,0,0,0.02); display:flex; align-items:center; justify-content:center;">
                 <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem;">
-                  <span style="font-size:2.5rem;">🧶</span>
-                  <span style="font-size:0.8rem; opacity:0.6;">Stitching Piece #${i}</span>
+                  <span style="font-size:2rem;">🧶</span>
+                  <span style="font-size:0.75rem; opacity:0.6;">Artisan Stitch Row #${i}</span>
                 </div>
               </div>
             </div>
@@ -879,164 +931,155 @@ export class Storefront {
     `;
   }
 
-  // Blog view
   renderBlogView() {
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
     return `
-      <div style="padding:4rem 6%; max-width:1000px; margin:0 auto;">
-        <h1 class="shop-section-title">${this.t('blog')}</h1>
-        <p class="shop-section-subtitle">${isAr ? 'نصائح العناية بالكروشيه وخطوات الحياكة اليدوية' : 'Crochet tips, caring guides, and wool secrets.'}</p>
-        
-        <div style="display:flex; flex-direction:column; gap:3rem;">
-          
-          <article class="glass-panel" style="padding:2.5rem; border-radius:var(--border-radius-lg); display:grid; grid-template-columns:1fr; gap:2rem;">
-            <div>
-              <span style="font-size:0.8rem; color:var(--primary-color); font-weight:700; text-transform:uppercase;">Care Instructions</span>
-              <h2 style="font-family:var(--font-heading); font-size:2rem; margin-top:0.5rem; margin-bottom:1rem;">How to wash and preserve handmade crochet cardigans</h2>
-              <p style="opacity:0.8; margin-bottom:1.5rem;">Hand-knit wool and cotton pieces require delicate washing to prevent stretching or felting. Discover our step-by-step hand-wash recipe using natural olive oil soaps...</p>
-              <div style="display:flex; justify-content:space-between; font-size:0.8rem; opacity:0.6;">
-                <span>Reading Time: 4 mins</span>
-                <span>By Artisan Hoda</span>
-              </div>
-            </div>
-          </article>
+      <div style="padding:4rem 6%; max-width:900px; margin:0 auto; text-align:start;">
+        <h1 style="font-size:2.8rem; margin-bottom:0.5rem; text-align:center;">${this.t('blog')}</h1>
+        <p style="text-align:center; opacity:0.7; margin-bottom:3rem;">${isAr ? 'تعلم كيفية العناية والاحتفاظ بملابس الكروشيه الخاصة بك' : 'Artisan tips, crochet caring guides, and wool secrets.'}</p>
 
+        <div style="display:flex; flex-direction:column; gap:3rem;">
           <article class="glass-panel" style="padding:2.5rem; border-radius:var(--border-radius-lg);">
-            <span style="font-size:0.8rem; color:var(--primary-color); font-weight:700; text-transform:uppercase;">Artisan Secrets</span>
-            <h2 style="font-family:var(--font-heading); font-size:2rem; margin-top:0.5rem; margin-bottom:1rem;">The art of organic plant dyeing for soft wool yarns</h2>
-            <p style="opacity:0.8; margin-bottom:1.5rem;">We explain how we boil pomegranate skins, walnut shells, and wild madder roots to dye our signature cream, beige, and terracotta cotton yarns...</p>
+            <span style="font-size:0.8rem; color:var(--primary-color); font-weight:700; text-transform:uppercase;">${isAr ? 'تعليمات العناية' : 'Care Guide'}</span>
+            <h2 style="font-size:2rem; margin-top:0.5rem; margin-bottom:1rem;">How to wash and preserve handmade crochet cardigans</h2>
+            <p style="opacity:0.85; margin-bottom:1.5rem;">Hand-knit cardigans require delicate washing to prevent stretching. We recommend hand-washing in cool water using light olive-oil soap and laying flat to dry...</p>
             <div style="display:flex; justify-content:space-between; font-size:0.8rem; opacity:0.6;">
-              <span>Reading Time: 6 mins</span>
+              <span>Reading: 5 mins</span>
               <span>By Artisan Hoda</span>
             </div>
           </article>
 
+          <article class="glass-panel" style="padding:2.5rem; border-radius:var(--border-radius-lg);">
+            <span style="font-size:0.8rem; color:var(--primary-color); font-weight:700; text-transform:uppercase;">${isAr ? 'أسرار الحرفة' : 'Craft Secret'}</span>
+            <h2 style="font-size:2rem; margin-top:0.5rem; margin-bottom:1rem;">The art of organic plant dyeing for soft wool yarns</h2>
+            <p style="opacity:0.85; margin-bottom:1.5rem;">Learn how we boil onion skins, walnut shells, and pomegranate skins to dye our cotton cords beige, terracotta, and soft brown without chemicals...</p>
+            <div style="display:flex; justify-content:space-between; font-size:0.8rem; opacity:0.6;">
+              <span>Reading: 7 mins</span>
+              <span>By Artisan Hoda</span>
+            </div>
+          </article>
         </div>
       </div>
     `;
   }
 
-  // About View
   renderAboutView() {
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
     return `
-      <div style="max-width:1000px; margin:0 auto; padding:4rem 6%; display:flex; flex-direction:column; gap:4rem;">
-        
-        <!-- Concept -->
-        <div style="display:grid; grid-template-columns:1fr; gap:3rem; align-items:center;">
-          <div>
-            <span style="font-size:0.8rem; text-transform:uppercase; color:var(--primary-color); font-weight:700;">Our Mission</span>
-            <h1 style="font-size:2.8rem; font-family:var(--font-heading); margin-top:0.5rem; margin-bottom:1.5rem;">Sustaining the Craft, Honoring the Stitch</h1>
-            <p style="opacity:0.8; line-height:1.8; margin-bottom:1.25rem;">
-              ${isAr ? 'بدأت قصتنا في قلب مدينة جبيل التاريخية، برؤية تهدف إلى إحياء فن الحياكة اليدوية اللبنانية وتمكين النساء الحرفيات في المناطق الريفية. كل قطعة كروشيه تطلبها توفر عملاً كريماً ومستداماً لهؤلاء السيدات.' : 'Our journey began in Byblos, Lebanon, with a vision to sustain the heritage craft of hand-knitting. We provide local women knitters with flexible, fair-wage livelihoods, allowing them to practice their passion while supporting their families.'}
-            </p>
-          </div>
+      <div style="max-width:1000px; margin:0 auto; padding:4rem 6%; display:flex; flex-direction:column; gap:4rem; text-align:start;">
+        <div>
+          <span style="font-size:0.8rem; text-transform:uppercase; color:var(--primary-color); font-weight:700;">${isAr ? 'رؤيتنا ورسالتنا' : 'Our Story'}</span>
+          <h1 style="font-size:2.8rem; margin-top:0.5rem; margin-bottom:1.5rem;">Sustaining the Craft, Honoring the Stitch</h1>
+          <p style="opacity:0.85; line-height:1.8; font-size:1.1rem; margin-bottom:1.5rem;">
+            ${isAr ? 'بدأت قصتنا في قلب أسواق جبيل الأثرية برؤية تهدف لإحياء حرفة الكروشيه ودعم الحرفيات في المناطق الريفية. كل قطعة كروشيه تطلبها توفر عملاً كريماً ومستداماً لهؤلاء السيدات وتضمن توارث أسرار الصنعة عبر الأجيال.' : 'Our journey began in Byblos, Lebanon, with a vision to sustain the heritage craft of hand-knitting. We provide local women knitters with flexible, fair-wage livelihoods, allowing them to practice their passion while supporting their families.'}
+          </p>
         </div>
 
-        <!-- Meet Knitter -->
-        <div class="glass-panel" style="padding:3rem; border-radius:var(--border-radius-lg); display:grid; grid-template-columns:1fr; gap:3rem;">
-          <div>
-            <span style="font-size:0.85rem; color:var(--primary-color); font-weight:700;">MEET THE ARTISAN</span>
-            <h2 style="font-family:var(--font-heading); font-size:2rem; margin-top:0.5rem; margin-bottom:1rem;">Artisan Hoda, Head Knitter</h2>
-            <p style="opacity:0.8; line-height:1.7; margin-bottom:1.5rem;">"Crochet is a language of knots. I have been knitting since I was 9 years old, taught by my grandmother. Stitching custom cardigans is my way of writing stories into yarn."</p>
-            <div style="background:var(--bg-color); padding:1rem; border-radius:8px; display:inline-block; font-size:0.9rem; font-weight:600;">📜 Authentic Handmade Heritage Approved</div>
-          </div>
+        <div class="glass-panel" style="padding:3rem; border-radius:var(--border-radius-lg);">
+          <span style="font-size:0.8rem; color:var(--primary-color); font-weight:700;">MEET THE ARTISAN</span>
+          <h2 style="font-size:2rem; margin-top:0.5rem; margin-bottom:1rem;">Artisan Hoda, Head Knitter</h2>
+          <p style="opacity:0.85; line-height:1.8; font-size:1rem; margin-bottom:1.5rem;">"Crochet is a language of knots. I have been knitting since I was 9 years old, taught by my grandmother. Stitching custom cardigans is my way of writing stories into yarn."</p>
+          <div style="background:var(--bg-color); padding:1rem; border-radius:8px; display:inline-block; font-size:0.9rem; font-weight:700;">📜 Authentic Handmade Heritage Approved</div>
         </div>
       </div>
     `;
   }
 
-  // Contact Page View
   renderContactView() {
-    const isAr = this.lang() === 'ar';
+    const isAr = this.isRtl();
     const settings = store.getSettings();
 
     return `
-      <div style="max-width:1200px; margin:0 auto; padding:4rem 6%; display:grid; grid-template-columns:1fr; gap:4rem;">
-        <div style="display:grid; grid-template-columns:1fr; gap:3rem;">
-          <!-- Left info -->
+      <div style="max-width:1200px; margin:0 auto; padding:4rem 6%; text-align:start;">
+        <h1 style="font-size:2.8rem; margin-bottom:2rem; text-align:center;">${this.t('contact')}</h1>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start;">
           <div>
-            <h1 style="font-size:2.8rem; font-family:var(--font-heading); margin-bottom:1rem;">Get in Touch</h1>
-            <p style="opacity:0.8; margin-bottom:2rem;">Have a question about sizing or custom orders? Reach out directly.</p>
-            
-            <div style="display:flex; flex-direction:column; gap:1.25rem; margin-bottom:2rem;">
-              <div>📍 <strong>Address:</strong> ${settings.contactAddress}</div>
-              <div>✉️ <strong>Email:</strong> ${settings.contactEmail}</div>
-              <div>📞 <strong>Phone:</strong> ${settings.contactPhone}</div>
-              <div>💬 <strong>WhatsApp:</strong> ${settings.whatsappNumber}</div>
-            </div>
-
-            <!-- Contact form -->
-            <form id="storefront-contact-form" style="display:flex; flex-direction:column; gap:1rem; max-width:500px;">
+            <h3 style="font-size:1.5rem; margin-bottom:1rem;">Send a Note</h3>
+            <form id="storefront-contact-form" style="display:flex; flex-direction:column; gap:1.25rem;">
               <div class="form-group">
                 <label>${this.t('name')}</label>
-                <input type="text" required style="background:var(--card-bg-color); border:1px solid var(--border-color); padding:0.6rem; border-radius:8px; color:var(--text-color);">
+                <input type="text" required>
               </div>
               <div class="form-group">
                 <label>${this.t('email')}</label>
-                <input type="email" required style="background:var(--card-bg-color); border:1px solid var(--border-color); padding:0.6rem; border-radius:8px; color:var(--text-color);">
+                <input type="email" required>
               </div>
               <div class="form-group">
-                <label>${isAr ? 'الرسالة' : 'Message'}</label>
-                <textarea rows="4" required style="background:var(--card-bg-color); border:1px solid var(--border-color); padding:0.6rem; border-radius:8px; color:var(--text-color);"></textarea>
+                <label>${isAr ? 'نص الرسالة' : 'Message'}</label>
+                <textarea rows="4" required></textarea>
               </div>
-              <button type="submit" class="btn-luxury">${isAr ? 'إرسال' : 'Send Message'}</button>
+              <button type="submit" class="btn-luxury">${isAr ? 'إرسال الرسالة' : 'Send Message'}</button>
             </form>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:2rem;">
+            <div class="glass-panel" style="padding:2.5rem; border-radius:var(--border-radius-md);">
+              <h3 style="font-size:1.3rem; margin-bottom:1.25rem;">Contact Information</h3>
+              <div style="display:flex; flex-direction:column; gap:1.25rem;">
+                <div>📍 <strong>Address:</strong> ${settings.contactAddress}</div>
+                <div>✉️ <strong>Email:</strong> ${settings.contactEmail}</div>
+                <div>📞 <strong>Phone:</strong> ${settings.contactPhone}</div>
+                <div>💬 <strong>WhatsApp:</strong> ${settings.whatsappNumber}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     `;
   }
 
-  // Cart renderers
+  // Cart drawer item rendering
   renderCartItems() {
     const container = document.getElementById('cart-items-list-container');
     if (!container) return;
 
     if (this.cart.length === 0) {
       container.innerHTML = `
-        <div style="text-align:center; padding:3rem; color:var(--neutral-gray);">
-          <span style="font-size:3rem;">🧶</span>
-          <p style="margin-top:1rem;">Your cart is empty.</p>
+        <div style="text-align:center; padding:4rem 0; color:var(--text-color); opacity:0.6;">
+          <span style="font-size:3.5rem; display:block; margin-bottom:1rem;">🛒</span>
+          <p style="font-weight:700;">${this.t('empty_cart')}</p>
         </div>
       `;
       return;
     }
 
+    const isAr = this.isRtl();
     const products = store.getProducts();
-    const isAr = this.lang() === 'ar';
 
     container.innerHTML = this.cart.map(item => {
       const prod = products.find(p => p.id === item.productId);
       const img = prod ? prod.image : '';
       const stock = prod ? prod.inventory : 100;
+      const name = isAr ? item.nameAr : item.nameEn;
 
       return `
-        <div style="display:flex; gap:1rem; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:1rem;">
-          <img src="${img}" style="width:65px; height:65px; object-fit:cover; border-radius:8px;" alt="">
+        <div style="display:flex; gap:1rem; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:1.25rem;">
+          <img src="${img}" style="width:65px; height:65px; object-fit:cover; border-radius:8px; border:1px solid var(--border-color);" alt="">
           <div style="flex:1;">
-            <h4 style="font-size:0.95rem; font-weight:600;">${item.name}</h4>
-            <div style="font-size:0.8rem; opacity:0.6;">Size: ${item.size} / Color: ${item.color}</div>
-            <div style="font-weight:700; color:var(--primary-color); font-size:0.9rem; margin-top:0.2rem;">$${item.price.toFixed(2)}</div>
-            <div class="quantity-selector mt-4" style="padding:0.2rem; width:fit-content; margin-top:0.4rem;">
+            <h4 style="font-size:0.95rem; font-weight:700; line-height:1.3;">${name}</h4>
+            <div style="font-size:0.75rem; opacity:0.6; margin-top:0.2rem;">Size: ${item.size} / Color: ${item.color}</div>
+            <div style="font-weight:800; color:var(--primary-color); font-size:0.95rem; margin-top:0.25rem;">${this.formatPrice(item.price)}</div>
+            
+            <div class="quantity-selector" style="margin-top:0.5rem; width:fit-content;">
               <button class="qty-btn cart-dec-qty" data-id="${item.productId}" data-size="${item.size}" data-color="${item.color}">-</button>
-              <span class="qty-val" style="width:25px;">${item.quantity}</span>
+              <span class="qty-val" style="font-size:0.85rem;">${item.quantity}</span>
               <button class="qty-btn cart-inc-qty" data-id="${item.productId}" data-size="${item.size}" data-color="${item.color}" ${item.quantity >= stock ? 'disabled style="opacity:0.3;"' : ''}>+</button>
             </div>
           </div>
-          <button class="cart-remove-item" data-id="${item.productId}" data-size="${item.size}" data-color="${item.color}" style="color:red; font-size:1.1rem; padding:0.5rem;">🗑️</button>
+          <button class="cart-remove-item" data-id="${item.productId}" data-size="${item.size}" data-color="${item.color}" style="color:#ef4444; font-size:1.2rem; padding:0.5rem; background:none; border:none; cursor:pointer;">🗑️</button>
         </div>
       `;
     }).join('');
   }
 
-  // Cart summary breaks
+  // Cart summary calculations
   renderCartSummary() {
-    const summaryContainer = document.getElementById('cart-summary-container');
-    if (!summaryContainer) return;
+    const container = document.getElementById('cart-summary-container');
+    if (!container) return;
 
     if (this.cart.length === 0) {
-      summaryContainer.innerHTML = '';
+      container.innerHTML = '';
       return;
     }
 
@@ -1048,35 +1091,34 @@ export class Storefront {
       subtotal += price * item.quantity;
     });
 
-    // 1. Gift wrapping addition
     let giftWrapFee = this.giftWrappingActive ? 5.00 : 0.00;
 
-    // 2. Auto discounts
+    // Automatic discounts
     const auto = CouponEngine.getAutomaticDiscounts(subtotal, this.customerEmail);
     let autoDisc = 0;
     auto.forEach(ad => autoDisc += ad.discountAmount);
 
     const subAfterAuto = Math.max(0, subtotal - autoDisc);
 
-    // 3. Coupon discounts
+    // Coupon discounts
     let couponDisc = 0;
-    let isFreeShippingCoupon = false;
+    let isFreeShipping = false;
 
     if (this.appliedCouponCode) {
       const res = CouponEngine.validateAndApply(this.appliedCouponCode, this.cart, this.customerEmail);
       const statusBox = document.getElementById('coupon-status-box');
       if (res.isValid) {
         couponDisc = res.discountAmount;
-        if (res.type === 'free_shipping') isFreeShippingCoupon = true;
-        
+        if (res.type === 'free_shipping') isFreeShipping = true;
+
         if (statusBox) statusBox.innerHTML = `
-          <div style="background:rgba(16,185,129,0.1); color:green; padding:0.4rem; border-radius:8px; font-size:0.8rem; display:flex; justify-content:space-between; margin-top:0.5rem;">
-            <span>🎟️ <strong>${res.code}</strong> applied (-$${couponDisc.toFixed(2)}${isFreeShippingCoupon ? ' + Free Ship' : ''})</span>
-            <button id="cart-remove-coupon-btn" style="color:red;">✕</button>
+          <div style="background:rgba(16,185,129,0.1); color:#10b981; padding:0.5rem; border-radius:6px; font-size:0.8rem; display:flex; justify-content:space-between; margin-top:0.5rem; align-items:center;">
+            <span>🎟️ <strong>${res.code}</strong> applied (-${this.formatPrice(couponDisc)}${isFreeShipping ? ' + Free Ship' : ''})</span>
+            <button id="cart-remove-coupon-btn" style="color:#ef4444; background:none; border:none; cursor:pointer; font-weight:700;">✕</button>
           </div>
         `;
       } else {
-        if (statusBox) statusBox.innerHTML = `<div style="color:red; font-size:0.8rem; margin-top:0.5rem;">❌ ${res.error}</div>`;
+        if (statusBox) statusBox.innerHTML = `<div style="color:#ef4444; font-size:0.8rem; margin-top:0.5rem;">❌ ${res.error}</div>`;
         this.appliedCouponCode = '';
       }
     } else {
@@ -1085,49 +1127,49 @@ export class Storefront {
     }
 
     const subAfterCoupon = Math.max(0, subAfterAuto - couponDisc);
-    const shipping = CouponEngine.calculateShipping(subAfterCoupon, isFreeShippingCoupon);
+    const shipping = CouponEngine.calculateShipping(subAfterCoupon, isFreeShipping);
     const total = subAfterCoupon + shipping + giftWrapFee;
 
-    // Loyalty Points (10% of total)
     const earnedPoints = Math.floor(total * 0.1);
+    const isAr = this.isRtl();
 
-    const isAr = this.lang() === 'ar';
-
-    summaryContainer.innerHTML = `
+    container.innerHTML = `
       <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; opacity:0.8;">
-        <span>Subtotal</span>
-        <span>$${subtotal.toFixed(2)}</span>
+        <span>${this.t('subtotal')}</span>
+        <span>${this.formatPrice(subtotal)}</span>
       </div>
       ${giftWrapFee > 0 ? `
         <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; opacity:0.8;">
-          <span>Gift Wrapping</span>
-          <span>+$${giftWrapFee.toFixed(2)}</span>
+          <span>${isAr ? 'تغليف الهدايا' : 'Gift Wrapping'}</span>
+          <span>+ ${this.formatPrice(giftWrapFee)}</span>
         </div>
       ` : ''}
       ${auto.map(ad => `
-        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color:green;">
-          <span>🎁 ${ad.text}</span>
-          <span>-$${ad.discountAmount.toFixed(2)}</span>
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color:#10b981;">
+          <span>🎁 ${isAr ? (ad.textAr || ad.text) : ad.text}</span>
+          <span>- ${this.formatPrice(ad.discountAmount)}</span>
         </div>
       `).join('')}
       ${couponDisc > 0 ? `
-        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color:green;">
-          <span>🎟️ Coupon (${this.appliedCouponCode})</span>
-          <span>-$${couponDisc.toFixed(2)}</span>
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color:#10b981;">
+          <span>🎟️ ${isAr ? 'كوبون خصم' : 'Coupon'} (${this.appliedCouponCode})</span>
+          <span>- ${this.formatPrice(couponDisc)}</span>
         </div>
       ` : ''}
       <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; opacity:0.8;">
-        <span>Shipping</span>
-        <span>${shipping === 0 ? '<span style="color:green; font-weight:700;">FREE</span>' : `$${shipping.toFixed(2)}`}</span>
+        <span>${this.t('shipping')}</span>
+        <span>${shipping === 0 ? `<span style="color:#10b981; font-weight:700;">${isAr ? 'مجانى' : 'FREE'}</span>` : `+ ${this.formatPrice(shipping)}`}</span>
       </div>
-      <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border-color); padding-top:0.75rem; margin-top:0.75rem; font-size:1.25rem; font-weight:800;">
-        <span>Total</span>
-        <span>$${total.toFixed(2)}</span>
+      <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border-color); padding-top:0.75rem; margin-top:0.75rem; font-size:1.3rem; font-weight:800;">
+        <span>${this.t('total')}</span>
+        <span>${this.formatPrice(total)}</span>
       </div>
-      <div style="font-size:0.75rem; opacity:0.7; text-align:center; margin-top:0.5rem; color:var(--primary-color);">
-        ✨ Earns ${earnedPoints} loyalty reward points!
+      <div style="font-size:0.75rem; opacity:0.8; text-align:center; margin-top:0.5rem; color:var(--primary-color);">
+        ✨ ${isAr ? `ستكسب ${earnedPoints} نقطة ولاء ومكافأة!` : `Earns ${earnedPoints} loyalty reward points!`}
       </div>
-      <button class="btn-luxury" id="cart-checkout-btn" style="width:100%; margin-top:1rem; justify-content:center;">Place Order (Checkout)</button>
+      <button class="btn-luxury" id="cart-checkout-btn" style="width:100%; margin-top:1rem; justify-content:center; padding:0.9rem;">
+        💳 ${this.t('checkout')}
+      </button>
     `;
   }
 
@@ -1139,11 +1181,6 @@ export class Storefront {
     badge.style.display = count === 0 ? 'none' : 'flex';
   }
 
-  updateWishlistCount() {
-    // Optional wishlist counter
-  }
-
-  // Visual Quick View modal popup
   showQuickView(productId) {
     const products = store.getProducts();
     const p = products.find(prod => prod.id === productId);
@@ -1153,61 +1190,52 @@ export class Storefront {
     const container = document.getElementById('quick-view-container');
     if (!overlay || !container) return;
 
-    let isOutOfStock = p.inventory <= 0;
+    const isAr = this.isRtl();
+    const name = isAr ? p.nameAr : p.nameEn;
+    const cat = isAr ? p.categoryAr : p.category;
+    const desc = isAr ? p.descriptionAr : p.descriptionEn;
 
     container.innerHTML = `
-      <button class="modal-close" id="close-quick-view-btn" style="position:absolute; top:1rem; right:1rem; font-size:1.3rem;">✕</button>
-      <div class="product-details-layout" style="gap:2rem;">
+      <button class="modal-close" id="close-quick-view-btn">✕</button>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; padding:1.5rem; text-align:start;">
         <div>
-          <img src="${p.image}" style="width:100%; height:320px; object-fit:cover; border-radius:12px;" alt="">
+          <img src="${p.image}" style="width:100%; height:320px; object-fit:cover; border-radius:12px; border:1px solid var(--border-color);" alt="">
         </div>
-        <div style="display:flex; flex-direction:column; gap:1rem; text-align:start;">
-          <span style="font-size:0.8rem; color:var(--primary-color); text-transform:uppercase; font-weight:700;">${p.category}</span>
-          <h2 style="font-family:var(--font-heading); font-size:2rem; margin:0;">${p.name}</h2>
-          <div style="font-size:1.5rem; font-weight:800; color:var(--primary-color);">$${p.price.toFixed(2)}</div>
-          <p style="opacity:0.8; font-size:0.9rem; line-height:1.6;">${p.description}</p>
+        <div style="display:flex; flex-direction:column; gap:1rem;">
+          <span style="font-size:0.8rem; color:var(--primary-color); font-weight:700; text-transform:uppercase;">${cat}</span>
+          <h2 style="font-family:var(--font-heading); font-size:1.8rem; margin:0; line-height:1.2;">${name}</h2>
+          <div style="font-size:1.6rem; font-weight:900; color:var(--primary-color);">${this.formatPrice(p.price)}</div>
+          <p style="opacity:0.85; font-size:0.9rem; line-height:1.6;">${desc}</p>
           
-          <div style="display:flex; gap:1rem; margin-top:1rem;">
-            <a href="#details-${p.id}" class="btn-luxury-outline" style="flex:1; justify-content:center; font-size:0.85rem;" id="quick-view-full-details-btn">View Specs</a>
-            <button class="btn-luxury" id="quick-view-add-cart-btn" ${isOutOfStock ? 'disabled' : ''} style="flex:1; justify-content:center; font-size:0.85rem;">＋ Add to Cart</button>
+          <div style="display:flex; gap:1rem; margin-top:auto; padding-top:1rem;">
+            <a href="#details-${p.id}" class="btn-luxury-outline" style="flex:1; justify-content:center; font-size:0.85rem;" id="quick-view-full-details-btn">${isAr ? 'عرض التفاصيل' : 'Specs details'}</a>
+            <button class="btn-luxury" id="quick-view-add-cart-btn" style="flex:1; justify-content:center; font-size:0.85rem;">＋ ${this.t('add_to_cart')}</button>
           </div>
         </div>
       </div>
     `;
 
-    container.querySelector('#close-quick-view-btn').addEventListener('click', () => {
+    container.querySelector('#close-quick-view-btn').addEventListener('click', () => overlay.classList.remove('active'));
+    container.querySelector('#quick-view-full-details-btn').addEventListener('click', () => overlay.classList.remove('active'));
+    
+    container.querySelector('#quick-view-add-cart-btn').addEventListener('click', () => {
+      this.addToCart(p.id, 1);
       overlay.classList.remove('active');
     });
-
-    container.querySelector('#quick-view-full-details-btn').addEventListener('click', () => {
-      overlay.classList.remove('active');
-    });
-
-    const addBtn = container.querySelector('#quick-view-add-cart-btn');
-    if (addBtn) {
-      addBtn.addEventListener('click', () => {
-        this.addToCart(p.id, 1);
-        overlay.classList.remove('active');
-      });
-    }
 
     overlay.classList.add('active');
   }
 
-  // Checkout form sheet
   showCheckoutModal() {
     const overlay = document.getElementById('checkout-overlay');
     const container = document.getElementById('checkout-container');
     if (!overlay || !container) return;
 
-    const settings = store.getSettings();
-    const isAr = this.lang() === 'ar';
-
+    const isAr = this.isRtl();
     container.innerHTML = `
-      <button class="modal-close" id="close-checkout-btn" style="position:absolute; top:1rem; right:1rem;">✕</button>
-      <h2 style="font-family:var(--font-heading); margin-bottom:1.5rem;">Stripe Luxury Checkout</h2>
-      
-      <!-- Simulated Stripe card sheet -->
+      <button class="modal-close" id="close-checkout-btn">✕</button>
+      <h2 style="font-family:var(--font-heading); margin-bottom:1.5rem; text-align:start;">${isAr ? 'بوابة الدفع الآمنة Stripe' : 'Stripe Luxury Secured Checkout'}</h2>
+
       <form id="stripe-checkout-form" style="display:flex; flex-direction:column; gap:1.25rem; text-align:start;">
         <div class="checkout-form-grid">
           <div class="form-group">
@@ -1221,33 +1249,29 @@ export class Storefront {
         </div>
 
         <div class="form-group">
-          <label>Shipping Delivery Address</label>
-          <textarea id="chk-address" rows="2" placeholder="e.g. Byblos, Main Street, Bldg 12" required style="background:var(--card-bg-color); border:1px solid var(--border-color); border-radius:8px; padding:0.6rem; color:var(--text-color);"></textarea>
+          <label>${isAr ? 'عنوان الشحن والتسليم' : 'Shipping Delivery Address'}</label>
+          <textarea id="chk-address" rows="2" placeholder="e.g. Byblos, Old Souks, Lebanon" required></textarea>
         </div>
 
-        <div style="background:rgba(120,53,15,0.02); border:1px solid var(--border-color); padding:1rem; border-radius:8px; display:flex; flex-direction:column; gap:0.8rem;">
-          <div style="font-size:0.85rem; font-weight:700; color:var(--primary-color);">🔒 Stripe Secured Card Information</div>
-          <div class="form-group">
-            <input type="text" placeholder="Card Number (4242 4242 4242 4242)" required style="background:#fff; border:1px solid var(--border-color); padding:0.6rem; border-radius:6px; color:#000;">
-          </div>
+        <div style="background:rgba(120,53,15,0.02); border:1px solid var(--border-color); padding:1.25rem; border-radius:8px; display:flex; flex-direction:column; gap:0.8rem;">
+          <div style="font-size:0.85rem; font-weight:700; color:var(--primary-color);">🔒 Secured Credit Card Sheet</div>
+          <input type="text" placeholder="Card Number (4242 4242 4242 4242)" required style="padding:0.6rem; border-radius:6px; border:1px solid var(--border-color);">
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
-            <input type="text" placeholder="MM/YY" required style="background:#fff; border:1px solid var(--border-color); padding:0.6rem; border-radius:6px; color:#000;">
-            <input type="text" placeholder="CVC" required style="background:#fff; border:1px solid var(--border-color); padding:0.6rem; border-radius:6px; color:#000;">
+            <input type="text" placeholder="MM / YY" required style="padding:0.6rem; border-radius:6px; border:1px solid var(--border-color);">
+            <input type="text" placeholder="CVC" required style="padding:0.6rem; border-radius:6px; border:1px solid var(--border-color);">
           </div>
         </div>
 
-        <button type="submit" class="btn-luxury mt-4" style="justify-content:center; padding:1rem;">Complete Payment & Place Order</button>
+        <button type="submit" class="btn-luxury mt-4" style="justify-content:center; padding:1rem; font-weight:700;">
+          💳 ${isAr ? 'تأكيد الدفع وإتمام الطلب' : 'Complete Payment'}
+        </button>
       </form>
     `;
 
-    container.querySelector('#close-checkout-btn').addEventListener('click', () => {
-      overlay.classList.remove('active');
-    });
-
-    const form = container.querySelector('#stripe-checkout-form');
-    form.addEventListener('submit', (e) => {
+    container.querySelector('#close-checkout-btn').addEventListener('click', () => overlay.classList.remove('active'));
+    container.querySelector('#stripe-checkout-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      this.completeOrder(form);
+      this.completeOrder(e.target);
     });
 
     overlay.classList.add('active');
@@ -1262,32 +1286,31 @@ export class Storefront {
       subtotal += price * item.quantity;
     });
 
-    const giftWrapFee = this.giftWrappingActive ? 5.00 : 0.00;
+    let giftWrapFee = this.giftWrappingActive ? 5.00 : 0.00;
     const auto = CouponEngine.getAutomaticDiscounts(subtotal, this.customerEmail);
     let autoDisc = 0;
     auto.forEach(ad => autoDisc += ad.discountAmount);
 
     const subAfterAuto = Math.max(0, subtotal - autoDisc);
-
     let couponDisc = 0;
-    let isFreeShippingCoupon = false;
+    let isFreeShipping = false;
     if (this.appliedCouponCode) {
       const res = CouponEngine.validateAndApply(this.appliedCouponCode, this.cart, this.customerEmail);
       if (res.isValid) {
         couponDisc = res.discountAmount;
-        if (res.type === 'free_shipping') isFreeShippingCoupon = true;
+        if (res.type === 'free_shipping') isFreeShipping = true;
       }
     }
 
     const subAfterCoupon = Math.max(0, subAfterAuto - couponDisc);
-    const shipping = CouponEngine.calculateShipping(subAfterCoupon, isFreeShippingCoupon);
-    const finalTotal = parseFloat((subAfterCoupon + shipping + giftWrapFee).toFixed(2));
+    const shipping = CouponEngine.calculateShipping(subAfterCoupon, isFreeShipping);
+    const total = parseFloat((subAfterCoupon + shipping + giftWrapFee).toFixed(2));
 
     const name = formElement.querySelector('#chk-name').value.trim();
     const email = formElement.querySelector('#chk-email').value.trim();
     const address = formElement.querySelector('#chk-address').value.trim();
 
-    // Deduct stock
+    // Deduct inventory
     const updatedProducts = products.map(p => {
       const cartItem = this.cart.find(c => c.productId === p.id);
       if (cartItem) {
@@ -1297,7 +1320,7 @@ export class Storefront {
     });
     store.saveProducts(updatedProducts);
 
-    // Save Order
+    // Save order
     const orderObj = {
       customerName: name,
       email,
@@ -1309,27 +1332,33 @@ export class Storefront {
       shippingCost: shipping,
       giftWrapActive: this.giftWrappingActive,
       includeCertificate: this.includeCertificate,
-      total: finalTotal,
+      total,
       date: new Date().toISOString()
     };
-    
     const saved = store.addOrder(orderObj);
 
-    // Render Success Page
+    // Render Success Modal
+    const isAr = this.isRtl();
     const container = document.getElementById('checkout-container');
     container.innerHTML = `
       <div style="text-align:center; padding:2rem 1rem;">
-        <span style="font-size:4rem; display:block; margin-bottom:1rem;">🧶</span>
-        <h2 style="font-family:var(--font-heading); margin-bottom:1rem;">Artisanal Stitching Initiated!</h2>
-        <p style="opacity:0.8; margin-bottom:2rem;">Thank you, ${name}. Your card has been processed and our knitters are preparing your package.</p>
-        
-        <div class="glass-panel" style="padding:1.5rem; border-radius:12px; text-align:start; margin-bottom:2rem;">
+        <span style="font-size:4.5rem; display:block; margin-bottom:1rem;">🧶</span>
+        <h2 style="font-family:var(--font-heading); margin-bottom:1rem; font-weight:700;">
+          ${isAr ? 'تم بدء حياكة قطعتك الخاصة!' : 'Artisanal Stitching Initiated!'}
+        </h2>
+        <p style="opacity:0.85; margin-bottom:2rem;">
+          ${isAr ? `شكراً لك، ${name}. تمت عملية الدفع بنجاح ويقوم الحرفيون لدينا بتجهيز طلبك حالياً.` : `Thank you, ${name}. Your card has been processed and our knitters are preparing your package.`}
+        </p>
+
+        <div class="glass-panel" style="padding:1.5rem; border-radius:12px; text-align:start; margin-bottom:2rem; font-size:0.95rem;">
           <div><strong>Order ID:</strong> <span style="font-weight:700; color:var(--primary-color);">${saved.id}</span></div>
-          <div><strong>Total Paid:</strong> $${finalTotal.toFixed(2)}</div>
+          <div><strong>Total Paid:</strong> ${this.formatPrice(total)}</div>
           <div><strong>Delivery Address:</strong> ${address}</div>
         </div>
 
-        <button class="btn-luxury" id="checkout-success-btn" style="width:100%; justify-content:center;">Return to Collection</button>
+        <button class="btn-luxury" id="checkout-success-btn" style="width:100%; justify-content:center;">
+          ${isAr ? 'العودة للمتجر' : 'Return to Collection'}
+        </button>
       </div>
     `;
 
@@ -1352,7 +1381,6 @@ export class Storefront {
   }
 
   celebrateConfetti() {
-    // Basic Confetti effect
     const canvas = document.createElement('canvas');
     canvas.className = 'confetti-canvas';
     document.body.appendChild(canvas);
@@ -1391,29 +1419,29 @@ export class Storefront {
     frame();
   }
 
-  // User Auth Portal modal display
   showUserPortal() {
     const overlay = document.getElementById('user-auth-overlay');
     const container = document.getElementById('user-auth-container');
     if (!overlay || !container) return;
 
+    const isAr = this.isRtl();
+
     if (this.userLoggedIn) {
-      // Render Dashboard
+      // User Dashboard
       const orders = store.getOrders().filter(o => o.email.toLowerCase() === this.userEmail.toLowerCase());
       const points = 150 + orders.reduce((sum, o) => sum + Math.floor(o.total * 0.1), 0);
-      const isAr = this.lang() === 'ar';
 
       container.innerHTML = `
-        <button class="modal-close" id="close-user-portal-btn" style="position:absolute; top:1rem; right:1rem;">✕</button>
-        <h2 style="font-family:var(--font-heading); margin-bottom:1.5rem;">Artisan Dashboard</h2>
-        
+        <button class="modal-close" id="close-user-portal-btn">✕</button>
+        <h2 style="font-family:var(--font-heading); margin-bottom:1.5rem; text-align:start;">${isAr ? 'بوابة المكافآت والولاء' : 'Artisan Rewards Dashboard'}</h2>
+
         <div style="display:flex; flex-direction:column; gap:1.25rem; text-align:start;">
           <div style="display:flex; justify-content:space-between; background:var(--card-bg-color); padding:1rem; border-radius:8px;">
-            <span>Loyalty Reward Points:</span>
-            <strong style="color:var(--primary-color);">${points} Points</strong>
+            <span>${isAr ? 'نقاط الولاء المكتسبة:' : 'Loyalty Reward Points:'}</span>
+            <strong style="color:var(--primary-color);">${points} ${isAr ? 'نقطة' : 'Points'}</strong>
           </div>
-          
-          <h3>My Orders Tracking</h3>
+
+          <h3>${isAr ? 'تتبع طلباتي المحلية' : 'My Orders Tracking'}</h3>
           <div style="max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:0.8rem;">
             ${orders.map(o => `
               <div class="glass-panel" style="padding:0.75rem; border-radius:8px; font-size:0.85rem;">
@@ -1421,13 +1449,15 @@ export class Storefront {
                   <span>${o.id}</span>
                   <span style="color:var(--primary-color);">${o.status}</span>
                 </div>
-                <div style="font-size:0.75rem; opacity:0.7; margin-top:0.2rem;">Total: $${o.total.toFixed(2)} - Date: ${new Date(o.date).toLocaleDateString()}</div>
+                <div style="font-size:0.75rem; opacity:0.7; margin-top:0.25rem;">Total: ${this.formatPrice(o.total)} - Date: ${new Date(o.date).toLocaleDateString()}</div>
               </div>
             `).join('')}
-            ${orders.length === 0 ? '<p style="opacity:0.6; font-size:0.9rem;">No orders registered under this account.</p>' : ''}
+            ${orders.length === 0 ? `<p style="opacity:0.6; font-size:0.9rem;">${isAr ? 'لا توجد أي طلبات مسجلة تحت هذا الحساب حالياً.' : 'No orders registered under this account.'}</p>` : ''}
           </div>
 
-          <button class="btn-danger" id="user-logout-btn" style="margin-top:1rem; padding:0.6rem; border-radius:8px;">Logout</button>
+          <button class="btn-danger" id="user-logout-btn" style="margin-top:1rem; padding:0.6rem; border-radius:8px;">
+            ${isAr ? 'تسجيل الخروج' : 'Logout'}
+          </button>
         </div>
       `;
 
@@ -1436,26 +1466,27 @@ export class Storefront {
         this.userLoggedIn = false;
         this.userEmail = '';
         overlay.classList.remove('active');
-        this.showToast("Logged out successfully.", "info");
+        this.showToast(isAr ? "تم تسجيل الخروج بنجاح" : "Logged out successfully.", "info");
       });
 
     } else {
-      // Render Login/Register form
+      // Login Register
       container.innerHTML = `
-        <button class="modal-close" id="close-user-portal-btn" style="position:absolute; top:1rem; right:1rem;">✕</button>
-        <h2 style="font-family:var(--font-heading); margin-bottom:1.5rem;">Join the Craft Circle</h2>
-        
+        <button class="modal-close" id="close-user-portal-btn">✕</button>
+        <h2 style="font-family:var(--font-heading); margin-bottom:1.5rem; text-align:start;">${isAr ? 'تسجيل الدخول / إنشاء حساب' : 'Join the Craft Circle'}</h2>
+
         <form id="user-login-form" style="display:flex; flex-direction:column; gap:1.25rem; text-align:start;">
           <div class="form-group">
             <label>${this.t('email')}</label>
-            <input type="email" id="u-email" required placeholder="name@email.com" style="background:var(--card-bg-color); border:1px solid var(--border-color); border-radius:8px; padding:0.6rem; color:var(--text-color);">
+            <input type="email" id="u-email" required placeholder="name@email.com">
           </div>
           <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="u-pass" required placeholder="••••••••" style="background:var(--card-bg-color); border:1px solid var(--border-color); border-radius:8px; padding:0.6rem; color:var(--text-color);">
+            <label>${isAr ? 'كلمة المرور' : 'Password'}</label>
+            <input type="password" id="u-pass" required placeholder="••••••••">
           </div>
-          
-          <button type="submit" class="btn-luxury" style="justify-content:center; padding:0.8rem; font-weight:700;">Login / Create Account</button>
+          <button type="submit" class="btn-luxury" style="justify-content:center; padding:0.8rem; font-weight:700;">
+            ${isAr ? 'دخول / إنشاء حساب' : 'Login / Create Account'}
+          </button>
         </form>
       `;
 
@@ -1467,27 +1498,18 @@ export class Storefront {
         this.userLoggedIn = true;
         this.userEmail = email;
         overlay.classList.remove('active');
-        this.showToast("Account authorized successfully!", "success");
+        this.showToast(isAr ? "تم الدخول للحساب بنجاح!" : "Authorized successfully!", "success");
       });
     }
 
-    container.querySelector('#close-user-portal-btn').addEventListener('click', () => {
-      overlay.classList.remove('active');
-    });
-
+    container.querySelector('#close-user-portal-btn').addEventListener('click', () => overlay.classList.remove('active'));
     overlay.classList.add('active');
   }
 
   bindGlobalEvents() {
-    // Menu item clicks
-    const items = this.container.querySelectorAll('.nav-item');
-    items.forEach(it => {
-      it.addEventListener('click', () => {
-        // Redraw content immediately on link trigger
-      });
-    });
+    const isAr = this.isRtl();
 
-    // Logo click resets to home
+    // Reset view on logo clicks
     const logo = document.getElementById('logo-home-btn');
     if (logo) {
       logo.addEventListener('click', () => {
@@ -1501,19 +1523,27 @@ export class Storefront {
       langBtn.addEventListener('click', () => {
         const nextLang = this.lang() === 'en' ? 'ar' : 'en';
         localStorage.setItem('active_language', nextLang);
-        store.notify('active_language', nextLang);
+        store.setData('active_language', nextLang);
       });
     }
 
-    // User profile click
+    // Currency switcher
+    const currSelect = document.getElementById('currency-switch-select');
+    if (currSelect) {
+      currSelect.addEventListener('change', (e) => {
+        const nextCurr = e.target.value;
+        localStorage.setItem('active_currency', nextCurr);
+        store.setData('active_currency', nextCurr);
+      });
+    }
+
+    // User dashboard
     const userBtn = document.getElementById('user-portal-btn');
     if (userBtn) {
-      userBtn.addEventListener('click', () => {
-        this.showUserPortal();
-      });
+      userBtn.addEventListener('click', () => this.showUserPortal());
     }
 
-    // Cart toggler
+    // Cart toggling
     const openCartBtn = document.getElementById('open-cart-btn');
     const closeCartBtn = document.getElementById('close-cart-btn');
     const cartOverlay = document.getElementById('cart-drawer-overlay');
@@ -1534,7 +1564,7 @@ export class Storefront {
       });
     }
 
-    // Floating scroll to top button
+    // Floating scroll button
     const topBtn = document.getElementById('scroll-top-btn');
     if (topBtn) {
       topBtn.addEventListener('click', () => {
@@ -1542,14 +1572,14 @@ export class Storefront {
       });
     }
 
-    // Quick Buy trigger in grid
+    // Delegated actions (grid product buying)
     document.addEventListener('click', (e) => {
       const quickBuy = e.target.closest('.quick-buy-btn');
       if (quickBuy) {
         const id = quickBuy.getAttribute('data-product-id');
         this.addToCart(id, 1);
       }
-      
+
       const wishToggle = e.target.closest('.wish-toggle-btn');
       if (wishToggle) {
         const id = wishToggle.getAttribute('data-product-id');
@@ -1562,7 +1592,6 @@ export class Storefront {
         this.showQuickView(id);
       }
 
-      // Coupon tags remove
       if (e.target && e.target.id === 'cart-remove-coupon-btn') {
         this.appliedCouponCode = '';
         const input = document.getElementById('coupon-code-input');
@@ -1571,7 +1600,7 @@ export class Storefront {
       }
     });
 
-    // Checkbox toggles in cart
+    // Cart details logic
     const giftCheck = document.getElementById('cart-gift-wrap-check');
     if (giftCheck) {
       giftCheck.addEventListener('change', () => {
@@ -1588,71 +1617,102 @@ export class Storefront {
       });
     }
 
-    // Coupon Apply Click in cart
-    const applyBtn = document.getElementById('coupon-apply-btn');
-    if (applyBtn) {
-      applyBtn.addEventListener('click', () => {
-        const input = document.getElementById('coupon-code-input');
-        if (input) {
-          this.appliedCouponCode = input.value.trim();
-          this.saveCart();
+    // Cart Qty updates
+    const cartList = document.getElementById('cart-items-list-container');
+    if (cartList) {
+      cartList.addEventListener('click', (e) => {
+        const dec = e.target.closest('.cart-dec-qty');
+        const inc = e.target.closest('.cart-inc-qty');
+        const del = e.target.closest('.cart-remove-item');
+
+        if (!dec && !inc && !del) return;
+
+        const id = (dec || inc || del).getAttribute('data-id');
+        const size = (dec || inc || del).getAttribute('data-size');
+        const color = (dec || inc || del).getAttribute('data-color');
+        const key = `${id}-${size}-${color}`;
+
+        const idx = this.cart.findIndex(item => `${item.productId}-${item.size}-${item.color}` === key);
+        if (idx === -1) return;
+
+        if (dec) {
+          if (this.cart[idx].quantity > 1) {
+            this.cart[idx].quantity -= 1;
+          } else {
+            this.cart.splice(idx, 1);
+          }
+        } else if (inc) {
+          const products = store.getProducts();
+          const p = products.find(prod => prod.id === id);
+          if (p && this.cart[idx].quantity < p.inventory) {
+            this.cart[idx].quantity += 1;
+          } else {
+            this.showToast(isAr ? 'الكمية المتوفرة محدودة بمخزون المنتج' : 'Limited to available stock.', 'warning');
+          }
+        } else if (del) {
+          this.cart.splice(idx, 1);
         }
+
+        this.saveCart();
       });
     }
 
-    // Checkout Modal opener
+    // Apply Coupon code
+    const applyCouponBtn = document.getElementById('coupon-apply-btn');
+    if (applyCouponBtn) {
+      applyCouponBtn.addEventListener('click', () => {
+        const val = document.getElementById('coupon-code-input').value.trim();
+        this.appliedCouponCode = val;
+        this.saveCart();
+      });
+    }
+
+    // Checkout modal opener
     const checkoutOpener = document.getElementById('cart-checkout-btn');
     if (checkoutOpener) {
-      checkoutOpener.addEventListener('click', () => {
-        this.showCheckoutModal();
-      });
+      checkoutOpener.addEventListener('click', () => this.showCheckoutModal());
     }
 
-    // Bind specific subpage handlers
     this.bindSubpageEvents();
   }
 
   bindSubpageEvents() {
     const route = this.getRoute();
+    const isAr = this.isRtl();
 
     if (route === 'shop') {
-      // Search field
       const search = document.getElementById('shop-search-field');
       if (search) {
         search.addEventListener('input', (e) => {
           this.searchQuery = e.target.value;
-          this.renderFilteredShopGrid();
+          this.renderFilteredGrid();
         });
       }
 
-      // Category filters
       this.container.querySelectorAll('.shop-cat-filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+          this.activeCategory = btn.getAttribute('data-cat');
           this.container.querySelectorAll('.shop-cat-filter-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          this.activeCategory = btn.getAttribute('data-cat');
-          this.renderFilteredShopGrid();
+          this.renderFilteredGrid();
         });
       });
 
-      // Price slider
-      const slider = document.getElementById('shop-price-slider');
-      if (slider) {
-        slider.addEventListener('input', (e) => {
+      const priceSlider = document.getElementById('shop-price-slider');
+      if (priceSlider) {
+        priceSlider.addEventListener('input', (e) => {
           this.priceLimit = parseInt(e.target.value);
-          // Update visual range value
-          const val = slider.previousElementSibling.querySelector('span:nth-child(2)');
-          if (val) val.innerText = `$${this.priceLimit}`;
-          this.renderFilteredShopGrid();
+          const valBox = priceSlider.previousElementSibling.querySelector('span:nth-child(2)');
+          if (valBox) valBox.innerText = `$${this.priceLimit}`;
+          this.renderFilteredGrid();
         });
       }
 
-      // Sort
-      const sort = document.getElementById('shop-sort-select');
-      if (sort) {
-        sort.addEventListener('change', (e) => {
+      const sortSel = document.getElementById('shop-sort-select');
+      if (sortSel) {
+        sortSel.addEventListener('change', (e) => {
           this.sortOrder = e.target.value;
-          this.renderFilteredShopGrid();
+          this.renderFilteredGrid();
         });
       }
 
@@ -1673,43 +1733,39 @@ export class Storefront {
         });
       }
 
-      // Details Qty selectors
+      // Quantity adjustments
       let qty = 1;
-      const val = document.getElementById('details-qty-val');
+      const valBox = document.getElementById('details-qty-val');
       const dec = document.getElementById('details-dec-qty');
       const inc = document.getElementById('details-inc-qty');
 
-      if (dec && inc && val) {
+      if (dec && inc && valBox) {
         dec.addEventListener('click', () => {
-          if (qty > 1) {
-            qty--;
-            val.innerText = qty;
-          }
+          if (qty > 1) { qty--; valBox.innerText = qty; }
         });
         inc.addEventListener('click', () => {
-          qty++;
-          val.innerText = qty;
+          qty++; valBox.innerText = qty;
         });
       }
 
-      // Color/Size Select selectors
+      // Option selectors
       const dots = this.container.querySelectorAll('.color-dot-selector');
-      dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-          dots.forEach(d => d.classList.remove('selected'));
-          dot.classList.add('selected');
+      dots.forEach(d => {
+        d.addEventListener('click', () => {
+          dots.forEach(o => o.classList.remove('selected'));
+          d.classList.add('selected');
         });
       });
 
       const sizes = this.container.querySelectorAll('.size-select-btn');
       sizes.forEach(s => {
         s.addEventListener('click', () => {
-          sizes.forEach(sz => sz.classList.remove('active'));
+          sizes.forEach(o => o.classList.remove('active'));
           s.classList.add('active');
         });
       });
 
-      // Cart buttons
+      // Actions buttons
       const addCart = document.getElementById('details-add-to-cart-btn');
       const buyNow = document.getElementById('details-buy-now-btn');
       const hash = window.location.hash || '#details-1';
@@ -1717,15 +1773,15 @@ export class Storefront {
 
       if (addCart) {
         addCart.addEventListener('click', () => {
-          const size = this.container.querySelector('.size-select-btn.active')?.getAttribute('data-size') || "M";
-          const color = this.container.querySelector('.color-dot-selector.selected')?.getAttribute('data-color') || "Original";
+          const size = this.container.querySelector('.size-select-btn.active')?.getAttribute('data-size') || 'M';
+          const color = this.container.querySelector('.color-dot-selector.selected')?.getAttribute('data-color') || 'Original';
           this.addToCart(prodId, qty, size, color);
         });
       }
       if (buyNow) {
         buyNow.addEventListener('click', () => {
-          const size = this.container.querySelector('.size-select-btn.active')?.getAttribute('data-size') || "M";
-          const color = this.container.querySelector('.color-dot-selector.selected')?.getAttribute('data-color') || "Original";
+          const size = this.container.querySelector('.size-select-btn.active')?.getAttribute('data-size') || 'M';
+          const color = this.container.querySelector('.color-dot-selector.selected')?.getAttribute('data-color') || 'Original';
           this.addToCart(prodId, qty, size, color);
           document.getElementById('cart-drawer').classList.add('active');
           document.getElementById('cart-drawer-overlay').classList.add('active');
@@ -1733,30 +1789,29 @@ export class Storefront {
       }
 
     } else if (route === 'custom') {
-      // Custom Order submits
       const form = document.getElementById('custom-knit-request-form');
       if (form) {
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-          
+
           const name = form.querySelector('#cust-name').value.trim();
           const email = form.querySelector('#cust-email').value.trim();
           const details = form.querySelector('#cust-spec').value.trim();
           const size = form.querySelector('#cust-size').value;
           const budget = parseFloat(form.querySelector('#cust-budget').value || '0');
-          const deliveryDate = form.querySelector('#cust-date').value;
+          const date = form.querySelector('#cust-date').value;
 
-          const submitOrder = (imageFile = '') => {
-            const orderData = { name, email, details, size, budget, deliveryDate, image: imageFile };
+          const submitOrder = (imgFile = '') => {
+            const orderData = { name, email, details, size, budget, deliveryDate: date, image: imgFile, colors: 'Multi' };
             store.addCustomOrder(orderData);
-            this.showToast(this.lang() === 'ar' ? 'تم إرسال طلبك بنجاح! سنقوم بمراجعته قريباً.' : 'Custom order request submitted successfully!', 'success');
+            this.showToast(isAr ? 'تم إرسال طلب الحياكة الخاص بك بنجاح! سنقوم بمراجعته والتواصل معك.' : 'Custom crochet request submitted successfully!', 'success');
             form.reset();
           };
 
           const file = form.querySelector('#cust-file');
           if (file && file.files && file.files[0]) {
             const reader = new FileReader();
-            reader.onload = (event) => submitOrder(event.target.result);
+            reader.onload = (ev) => submitOrder(ev.target.result);
             reader.readAsDataURL(file.files[0]);
           } else {
             submitOrder();
@@ -1765,16 +1820,15 @@ export class Storefront {
       }
     }
 
-    // Grid image details navigation clicks
+    // Grid detail trigger
     this.container.querySelectorAll('.open-details-trigger').forEach(trigger => {
       trigger.addEventListener('click', () => {
-        const card = trigger.closest('.crochet-card');
-        const id = card.getAttribute('data-product-id');
+        const id = trigger.closest('.crochet-card').getAttribute('data-product-id');
         window.location.hash = `#details-${id}`;
       });
     });
 
-    // Home Dots
+    // Hero Carousel Dots
     const dots = this.container.querySelectorAll('.dot');
     dots.forEach(dot => {
       dot.addEventListener('click', () => {
@@ -1785,8 +1839,8 @@ export class Storefront {
     });
   }
 
-  renderFilteredShopGrid() {
-    const grid = this.container.querySelector('.crochet-grid');
+  renderFilteredGrid() {
+    const grid = document.getElementById('shop-products-grid');
     if (!grid) return;
 
     const products = store.getProducts();
@@ -1797,7 +1851,12 @@ export class Storefront {
     }
     if (this.searchQuery.trim()) {
       const q = this.searchQuery.toLowerCase();
-      filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+      filtered = filtered.filter(p => 
+        p.nameEn.toLowerCase().includes(q) || 
+        p.nameAr.includes(q) ||
+        p.descriptionEn.toLowerCase().includes(q) ||
+        p.descriptionAr.includes(q)
+      );
     }
     filtered = filtered.filter(p => p.price <= this.priceLimit);
 
@@ -1810,9 +1869,9 @@ export class Storefront {
     grid.innerHTML = filtered.map(p => this.renderProductCard(p)).join('');
     if (filtered.length === 0) {
       grid.innerHTML = `
-        <div style="grid-column: 1 / -1; padding: 5rem; text-align:center; color:var(--neutral-gray);">
-          <span style="font-size:3rem;">🧶</span>
-          <p style="margin-top:1rem;">No items match the chosen filters.</p>
+        <div style="grid-column: 1 / -1; padding: 6rem; text-align:center; color:var(--text-color); opacity:0.6;">
+          <span style="font-size:3.5rem; display:block;">🧶</span>
+          <p style="margin-top:1.5rem; font-size:1.1rem; font-weight:700;">${this.isRtl() ? 'لم يتم العثور على منتجات مطابقة' : 'No items match your criteria.'}</p>
         </div>
       `;
     }
@@ -1820,11 +1879,12 @@ export class Storefront {
     // Rebind triggers
     this.container.querySelectorAll('.open-details-trigger').forEach(trigger => {
       trigger.addEventListener('click', () => {
-        const card = trigger.closest('.crochet-card');
-        const id = card.getAttribute('data-product-id');
+        const id = trigger.closest('.crochet-card').getAttribute('data-product-id');
         window.location.hash = `#details-${id}`;
       });
     });
   }
 }
-export const storefront = Storefront;
+
+export default Storefront;
+export { Storefront };
