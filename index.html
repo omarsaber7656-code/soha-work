@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOHA Premium Store - Admin Live Editor & Discounts</title>
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- App Mount Root -->
+  <div id="app-root"></div>
+
+  <!-- Router and Bootstrap -->
+  <script type="module">
+    import { Storefront } from './js/storefront.js';
+    import { Admin } from './js/admin.js';
+    import { LiveEditor } from './js/editor.js';
+
+    let currentInstance = null;
+
+    function router() {
+      const hash = window.location.hash || '#home';
+      
+      // Clean up previous view instance subscriptions to prevent leaks
+      if (currentInstance && typeof currentInstance.destroy === 'function') {
+        currentInstance.destroy();
+      }
+      
+      const root = document.getElementById('app-root');
+      root.innerHTML = '';
+      
+      if (hash.startsWith('#home') || hash === '#' || hash === '') {
+        currentInstance = new Storefront('app-root');
+      } else if (hash.startsWith('#admin')) {
+        currentInstance = new Admin('app-root');
+      } else if (hash.startsWith('#editor')) {
+        currentInstance = new LiveEditor('app-root');
+      } else {
+        // Fallback redirection
+        window.location.hash = '#home';
+      }
+    }
+
+    // Router listeners
+    window.addEventListener('hashchange', router);
+    window.addEventListener('DOMContentLoaded', router);
+  </script>
+</body>
+</html>
